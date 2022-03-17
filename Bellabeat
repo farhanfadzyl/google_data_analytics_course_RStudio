@@ -120,6 +120,22 @@ sleep_cleaned <- unique(sleep)
 view(sleep_cleaned)
 ```
 
+Adding Day Of Week Column
+```{r adding Day Of Week column}
+mergedfile2 <- mergedfile
+mergedfile2$DayOfWeek <- weekdays(mergedfile2$ActivityDate, abbreviate = TRUE)
+view(mergedfile2)
+```
+
+Reorder Day of Week
+```{r Reorder Day of Week}
+mergedfile3 <- mergedfile2 %>%
+  select(DayOfWeek, TotalSteps, TotalDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes,FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes,Calories) %>%
+  mutate(DayOfWeek = factor(DayOfWeek, levels= c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))
+
+view(mergedfile3)
+```
+
 
 ## Analyze: Summary statistics
 
@@ -207,36 +223,19 @@ weightlog %>%
 
 ## Share: Visualization
 
-Relationship between Calories & Total Steps
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalSteps, y=Calories)) + 
-  geom_smooth(mapping=aes(x=TotalSteps, y=Calories)) + 
-  labs(title="Relationship between Calories & Total Steps")
-```
-
-Relationship between Calories & Sedentary Minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
-  geom_smooth(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
-  labs(title="Relationship between Calories & Sedentary Minutes")
-```
-
-Relationship between Calories & Heart Rate
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=AverageHeartRate, y=Calories)) + 
-  geom_smooth(mapping=aes(x=AverageHeartRate, y=Calories)) + 
-  labs(title="Relationship between Calories & Average Heart Rate")
-```
-
-```{r}
-class1 <- weekdays(dailyactivity$ActivityDate,abbreviate=TRUE)
-
-```
-
 Average total steps per day
+```{r Average Total Steps}
+Average_Total_Steps <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Average_Total_Steps = mean(TotalSteps))
+
+ggplot(Average_Total_Steps, aes(x=DayOfWeek, y=Average_Total_Steps)) +
+  geom_bar(stat="identity") +
+  xlab("") +
+  labs(title="Average Total Steps per Day")
+```
+
+
 
 Average calories burned per day
 
@@ -255,10 +254,28 @@ Average minutes to fall asleep per day
 
 
 Relationship between calories burned & total steps
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalSteps, y=Calories)) + 
+  geom_smooth(mapping=aes(x=TotalSteps, y=Calories)) + 
+  labs(title="Relationship between Calories & Total Steps")
+```
 
 Relationship between calories burned & sedentary minutes/activity minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
+  geom_smooth(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
+  labs(title="Relationship between Calories & Sedentary Minutes")
+```
 
 Relationship calories burned & heart rate
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=AverageHeartRate, y=Calories)) + 
+  geom_smooth(mapping=aes(x=AverageHeartRate, y=Calories)) + 
+  labs(title="Relationship between Calories & Average Heart Rate")
+```
 
 
 
