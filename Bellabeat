@@ -1,0 +1,316 @@
+---
+title: 'Case Study 2: Bellabeat'
+author: "Farhan"
+date: '2022-03-14'
+output: html_document
+---
+
+## Install and load packages
+
+```{r install packages}
+install.packages("stringi")
+install.packages("tidyverse")
+install.packages("skimr")
+install.packages("janitor")
+```
+
+```{r load packages}
+library(stringi)
+library(tidyverse)
+library(skimr)
+library(janitor)
+```
+
+
+## Upload CSV file to R
+
+```{r upload csv file}
+dailyactivity <- read_csv("dailyActivity_merged.csv")
+heartrate <- read_csv("heartrate_seconds_merged.csv")
+sleep <- read_csv("sleepDay_merged.csv")
+weightlog <- read_csv("weightLogInfo_merged.csv")
+mergedfile <- read_csv("daily_activity_sleep_weightlog_heartrate_merged.csv")
+```
+
+
+## View data
+
+_daily activity:_
+```{r view data with head()}
+head(dailyactivity)
+```
+```{r view data with str()}
+str(dailyactivity)
+```
+```{r view data with glimpse()}
+glimpse(dailyactivity)
+```
+```{r view column names}
+colnames(dailyactivity)
+```
+
+_heartrate:_
+```{r view data with head()}
+head(heartrate)
+```
+```{r view data with str()}
+str(heartrate)
+```
+```{r view data with glimpse()}
+glimpse(heartrate)
+```
+```{r view column names}
+colnames(heartrate)
+```
+
+_sleep:_
+```{r view data with head()}
+head(sleep)
+```
+```{r view data with str()}
+str(sleep)
+```
+```{r view data with glimpse()}
+glimpse(sleep)
+```
+```{r view column names}
+colnames(sleep)
+```
+
+_weightlog:_
+```{r view data with head()}
+head(weightlog)
+```
+```{r view data with str()}
+str(weightlog)
+```
+```{r view data with glimpse()}
+glimpse(weightlog)
+```
+```{r view column names}
+colnames(weightlog)
+```
+
+_mergedfile:_
+```{r view data with head()}
+head(mergedfile)
+```
+```{r view data with str()}
+str(mergedfile)
+```
+```{r view data with glimpse()}
+glimpse(mergedfile)
+```
+```{r view column names}
+colnames(mergedfile)
+```
+
+
+## Data cleaning
+
+Identify duplicate data in Sleep file.
+```{r identify duplicates}
+duplicated(sleep)
+sum(duplicated(sleep))
+```
+
+Remove duplicate data in Sleep file.
+```{r remove duplicates}
+sleep_cleaned <- unique(sleep)
+view(sleep_cleaned)
+```
+
+
+## Analyze: Summary statistics
+
+Determine the number of unqiue values and the number of rows in the data frame by using n_distinct() and nrow() functions respectively.
+```{r number of unique value}
+n_distinct(dailyactivity$Id)
+n_distinct(heartrate$Id)
+n_distinct(sleep_cleaned$Id)
+n_distinct(weightlog$Id)
+n_distinct(mergedfile$Id)
+```
+
+```{r number of rows}
+nrow(dailyactivity)
+nrow(heartrate)
+nrow(sleep_cleaned)
+nrow(weightlog)
+nrow(mergedfile)
+```
+
+The hear rate and weight log data frames consist of 14 and 8 unique Ids respectively, which indicates a very low number of participants. Therefore, using the data frames individually will not be able to provide reliable recommendations.
+
+_daily activity:_
+```{r summary of daily activity}
+userdata_df %>%  
+  select(TotalSteps,
+         TotalDistance,            
+         VeryActiveMinutes,        
+         FairlyActiveMinutes,     
+         LightlyActiveMinutes,    
+         SedentaryMinutes,         
+         Calories) %>%
+  summary()
+```
+
+**Findings:**
+- Average user took 7,638 steps a day, which is below Centers for Disease Control and Prevention (CDC) recommendation of 10,000 steps a day (CDC, n.d.).
+
+- Average user spent 21.16 minutes a day doing very active activity. This equates to 148.12 minutes of very active activity per week, exceeded CDC's recommendation of 75 minutes per week (CDC, 2020). This suggests participants have a very active lifestyle.
+
+- Average user spent 13.56 minutes a day doing moderately active activity, which equates to 94.92 minutes per week. This is below CDC's recommendation of 150 minutes per week (CDC, 2020). However, the shortage of minutes was probably compensated in the very active activity. The fact that users spent more time on very active activity than moderately and light activities suggests that the users have strong interest in doing vigorous activities. Company could market product's durability, comfort, functionality and features tailored to the vigorous activities such as running, jogging, swimming continous laps, playing sports or skipping with a rope.
+
+- Average user spent 192.8 minutes or 3.21 hours a day doing light activity.
+
+- Average user spent 991.2 minutes or 16.53 hours of sedentary time a day. This is a significant amount of time and this will have a dentrimental effect on health. Even if sedentary time cannot be reduced for unavoidable reasons, studies have found that engaging in sufficient exercise equivalent to or more than 150 to 300 minutes of moderately active activities per week could offset the adverse effects of sedentary behaviour (Park et al., 20200).
+
+- Average user burned 2,304 calories a day. Studies found that the average person burns around 1,800 calories a day doing absolutely nothing (Walsh, 2022). This suggests average users are burning 504 calories worth of exercise each day.
+
+_heartrate:_
+```{r summary of heart rate}
+heartrate %>%  
+  select(Value) %>%
+  summary()
+```
+
+**Findings:**
+- Despite with the low sample size of 14 participants, the average user's heart rate is 77 beats per minute (bpm), which falls between a normal resting heart rate for adults, ranges from 60 to 100 bpm according to the American Heart Association (AHA) (AHA, 2015). Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness (Laskowski, 2020).
+
+_sleep:_
+```{r summary of sleep}
+sleep_cleaned %>%  
+  select(TotalSleepRecords,  
+         TotalMinutesAsleep,
+         TotalTimeInBed) %>%
+  summary()
+```
+
+**Findings:**
+- Average user slept around 419.2 minutes or 7 hours per day, which met CDC's sleep recommendations for adults (CDC, 2017).
+
+- Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep. Studies suggest if someone cannot fall asleep within 15 to 20 minutes, the person should leave his or her bed. The person should engage in relaxing activities like read a boring book, stretch or breath slowly, allowing tension to dissipate, while waiting for sleepiness to come. The activities should not be stimulating or rewarding, like watching television or computers (Peters, 2020).
+
+_weightlog:_
+```{r summary of sleep}
+weightlog %>%  
+  select(WeightKg,
+         Fat,
+         BMI) %>%
+  summary()
+```
+
+**Findings:**
+- Average user's weight is 72kg with a BMI of 25.19, which falls within the overweight range of 25.0 to 29.9. A healthy BMI range falls within 18.5 to 24.9 (CDC, 2020). However, as the sample size for weight log data consists of only 8 participants, the finding is deemed as unreliable due to insufficient sample size to represent the population.
+
+
+## Share: Visualization
+
+Relationship between Calories & Total Steps
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalSteps, y=Calories)) + 
+  geom_smooth(mapping=aes(x=TotalSteps, y=Calories)) + 
+  labs(title="Relationship between Calories & Total Steps")
+```
+
+Relationship between Calories & Sedentary Minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
+  geom_smooth(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
+  labs(title="Relationship between Calories & Sedentary Minutes")
+```
+
+Relationship between Calories & Heart Rate
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=AverageHeartRate, y=Calories)) + 
+  geom_smooth(mapping=aes(x=AverageHeartRate, y=Calories)) + 
+  labs(title="Relationship between Calories & Average Heart Rate")
+```
+
+```{r}
+class1 <- weekdays(dailyactivity$ActivityDate,abbreviate=TRUE)
+
+```
+
+Average total steps per day
+
+Average calories burned per day
+
+Average activity minutes per day
+
+Average sedentary minutes per day
+
+Pie chart of daily activities
+
+Average heart rate per day
+
+Average total minutes asleep per day
+
+Average minutes to fall asleep per day
+
+
+
+Relationship between calories burned & total steps
+
+Relationship between calories burned & sedentary minutes/activity minutes
+
+Relationship calories burned & heart rate
+
+
+
+Relationship between total minutes asleep & total steps
+
+Relationship between total minutes asleep & sedentary minutes/activity minutes
+
+Relationship between total minutes asleep & calories burned
+
+Relationship total minutes asleep & heart rate
+
+
+
+Relationship between minutes to fall asleep & total steps
+
+Relationship between minutes to fall asleep & sedentary minutes/activity minutes
+
+Relationship between minutes to fall asleep & calories burned
+
+Relationship between minutes to fall asleep & heart rate
+
+
+
+
+
+
+
+
+## Act: Recommendations
+
+**Recommendations**
+1. 
+
+2. 
+
+
+## References
+
+American Heart Association. (2015, July 31). All About Heart Rate (Pulse). https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse
+
+Centers for Disease Control and Prevention. (n.d.). Lifestyle Coach Facilitation Guide: Post-Core. https://www.cdc.gov/diabetes/prevention/pdf/postcurriculum_session8.pdf
+
+Centers for Disease Control and Prevention. (2017, March 2). How Much Sleep Do I Need? - Sleep and Sleep Disorders. https://www.cdc.gov/sleep/about_sleep/how_much_sleep.html
+
+Centers for Disease Control and Prevention. (2020, September 17). Assessing Your Weight. https://www.cdc.gov/healthyweight/assessing/index.html
+
+Centers for Disease Control and Prevention. (2020, October 7). How much physical activity do adults need? https://www.cdc.gov/physicalactivity/basics/adults/index.htm
+
+Laskowski, E. R. (2020, October 2). Heart rate: What’s normal? Mayo Clinic. https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979?reDate=15032022
+
+Park J. H., Moon J. H., Kim H. J., Kong M. H., Oh Y. H. (2020). Sedentary lifestyle: overview of updated evidence of potential health risks. Korean J. Fam. Med. 41 365–373. 10.4082/KJFM.20.0165
+
+Peters, B. (2020, August 13). Improve Insomnia by Avoiding Time Spent Lying Awake in Bed at Night. Verywell Health. https://www.verywellhealth.com/30-days-to-better-sleep-dont-lie-awake-in-bed-at-night-3969250
+
+Walsh, G. (2022, January 4). How many calories do I burn a day- and how many calories do I need to lose weight? GoodtoKnow. https://www.goodto.com/wellbeing/diets-exercise/what-is-calorie-how-many-lose-weigt-425557
