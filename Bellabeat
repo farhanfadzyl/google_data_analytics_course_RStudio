@@ -227,17 +227,17 @@ Average total steps per day
 ```{r Average Total Steps}
 Average_Total_Steps <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
-  summarize(Average_Total_Steps = mean(TotalSteps))
+  summarize(Average_Total_Steps =round(mean(TotalSteps), digits=0))
 
-ggplot(Average_Total_Steps, aes(x=DayOfWeek, y=Average_Total_Steps)) +
-  geom_bar(stat="identity") +
-  xlab("") +
+ggplot(Average_Total_Steps, aes(x = DayOfWeek, y = Average_Total_Steps)) +
+  geom_col() +
+  geom_text(aes(label = Average_Total_Steps), vjust = 1.5, colour = "white") +
   labs(title="Average Total Steps per Day")
 ```
 
-
-
 Average calories burned per day
+
+
 
 Average activity minutes per day
 
