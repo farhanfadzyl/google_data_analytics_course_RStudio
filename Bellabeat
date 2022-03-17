@@ -224,7 +224,7 @@ weightlog %>%
 ## Share: Visualization
 
 Average total steps per day
-```{r Average Total Steps}
+```{r}
 Average_Total_Steps <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
   summarize(Average_Total_Steps =round(mean(TotalSteps), digits=0))
@@ -236,12 +236,68 @@ ggplot(Average_Total_Steps, aes(x = DayOfWeek, y = Average_Total_Steps)) +
 ```
 
 Average calories burned per day
+```{r}
+Average_Calories <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Calories_Burned =round(mean(Calories), digits=0))
 
+ggplot(Average_Calories, aes(x = DayOfWeek, y = Calories_Burned)) +
+  geom_col() +
+  geom_text(aes(label = Calories_Burned), vjust = 1.5, colour = "white") +
+  labs(title="Average Calories Burned per Day")
+```
 
+Average of very active activity minutes per day
+```{r}
+AveVAMins <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Very_Active_Activity_Minutes =round(mean(VeryActiveMinutes), digits=0))
 
-Average activity minutes per day
+ggplot(AveVAMins, aes(x = DayOfWeek, y = Very_Active_Activity_Minutes)) +
+  geom_col() +
+  geom_text(aes(label = Very_Active_Activity_Minutes), vjust = 1.5, colour = "white") +
+  labs(title="Average of Very Active Activity Minutes per Day")
+```
+
+Average of very active activity minutes per day
+```{r}
+AveFAMins <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Fairly_Active_Activity_Minutes =round(mean(FairlyActiveMinutes), digits=0))
+
+ggplot(AveFAMins, aes(x = DayOfWeek, y = Fairly_Active_Activity_Minutes)) +
+  geom_col() +
+  geom_text(aes(label = Fairly_Active_Activity_Minutes), vjust = 1.5, colour = "white") +
+  labs(title="Average of Fairly Active Activity Minutes per Day")
+```
+
+Average of lightly active activity minutes per day
+```{r}
+AveLAMins <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Lightly_Active_Activity_Minutes =round(mean(LightlyActiveMinutes), digits=0))
+
+ggplot(AveLAMins, aes(x = DayOfWeek, y = Lightly_Active_Activity_Minutes)) +
+  geom_col() +
+  geom_text(aes(label = Lightly_Active_Activity_Minutes), vjust = 1.5, colour = "white") +
+  labs(title="Average of Lightly Active Activity Minutes per Day")
+```
 
 Average sedentary minutes per day
+```{r}
+AveSMins <- mergedfile3 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Sedentary_Minutes =round(mean(SedentaryMinutes), digits=0))
+
+ggplot(AveSMins, aes(x = DayOfWeek, y = Sedentary_Minutes)) +
+  geom_col() +
+  geom_text(aes(label = Sedentary_Minutes), vjust = 1.5, colour = "white") +
+  labs(title="Average of Sedentary Minutes per Day")
+```
+
+
+
+
 
 Pie chart of daily activities
 
