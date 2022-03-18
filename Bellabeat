@@ -152,6 +152,8 @@ sleep4 <- sleep3 %>%
 Adding "Minutes to Fall Asleep" Column
 ```{r Adding "Minutes to Fall Asleep" column}
 sleep4$MinutesToFallAsleep <-with(sleep4,TotalTimeInBed - TotalMinutesAsleep)
+
+mergedfile$MinutesToFallAsleep <-with(mergedfile,TotalTimeInBed - TotalMinutesAsleep)
 ```
 
 
