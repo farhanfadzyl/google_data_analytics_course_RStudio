@@ -176,11 +176,11 @@ nrow(weightlog)
 nrow(mergedfile)
 ```
 
-The hear rate and weight log data frames consist of 14 and 8 unique Ids respectively, which indicates a very low number of participants. Therefore, using the data frames individually will not be able to provide reliable recommendations.
+The heart rate and weight log data frames consist of 14 and 8 unique Ids respectively, which indicates a very low number of participants. Therefore, using the data frames individually will not be able to provide reliable recommendations.
 
 _daily activity:_
 ```{r summary of daily activity}
-userdata_df %>%  
+dailyactivity %>%  
   select(TotalSteps,
          TotalDistance,            
          VeryActiveMinutes,        
@@ -196,7 +196,7 @@ userdata_df %>%
 
 - Average user spent 21.16 minutes a day doing very active activity. This equates to 148.12 minutes of very active activity per week, exceeded CDC's recommendation of 75 minutes per week (CDC, 2020). This suggests participants have a very active lifestyle.
 
-- Average user spent 13.56 minutes a day doing moderately active activity, which equates to 94.92 minutes per week. This is below CDC's recommendation of 150 minutes per week (CDC, 2020). However, the shortage of minutes was probably compensated in the very active activity. The fact that users spent more time on very active activity than moderately and light activities suggests that the users have strong interest in doing vigorous activities. Company could market product's durability, comfort, functionality and features tailored to the vigorous activities such as running, jogging, swimming continous laps, playing sports or skipping with a rope.
+- Average user spent 13.56 minutes a day doing moderately active activity, which equates to 94.92 minutes per week. This is below CDC's recommendation of 150 minutes per week (CDC, 2020). However, the shortage of minutes was probably compensated in the very active activity. 
 
 - Average user spent 192.8 minutes or 3.21 hours a day doing light activity.
 
@@ -212,7 +212,7 @@ heartrate %>%
 ```
 
 **Findings:**
-- Despite with the low sample size of 14 participants, the average user's heart rate is 77 beats per minute (bpm), which falls between a normal resting heart rate for adults, ranges from 60 to 100 bpm according to the American Heart Association (AHA) (AHA, 2015). Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness (Laskowski, 2020).
+- Despite the low sample size of 14 participants, the average user's heart rate is 77 beats per minute (bpm), which falls between a normal resting heart rate for adults, ranges from 60 to 100 bpm according to the American Heart Association (AHA) (AHA, 2015). Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness (Laskowski, 2020).
 
 _sleep:_
 ```{r summary of sleep}
@@ -226,7 +226,7 @@ sleep_cleaned %>%
 **Findings:**
 - Average user slept around 419.2 minutes or 7 hours per day, which met CDC's sleep recommendations for adults (CDC, 2017).
 
-- Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep. Studies suggest if someone cannot fall asleep within 15 to 20 minutes, the person should leave his or her bed. The person should engage in relaxing activities like read a boring book, stretch or breath slowly, allowing tension to dissipate, while waiting for sleepiness to come. The activities should not be stimulating or rewarding, like watching television or computers (Peters, 2020).
+- Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep.
 
 _weightlog:_
 ```{r summary of sleep}
@@ -243,7 +243,7 @@ weightlog %>%
 
 ## Share: Visualization
 
-Average total steps per day
+Figure 1: Average Total Steps per Day
 ```{r}
 Average_Total_Steps <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
@@ -254,8 +254,9 @@ ggplot(Average_Total_Steps, aes(x = DayOfWeek, y = Average_Total_Steps)) +
   geom_text(aes(label = Average_Total_Steps), vjust = 1.5, colour = "white") +
   labs(title="Average Total Steps per Day")
 ```
+Figure 1 shows that the users did not achieve CDC's recommended 10,000 steps per day. Sunday was observed to have the least number of steps of 6,933 steps, and Saturday was observed to have the highest number of steps of 8,153 steps. Weekdays shows a consistent number of steps ranging from 7,406 steps to 8,125 steps. 
 
-Average calories burned per day
+Figure 2: Average Calories Burned per Day
 ```{r}
 Average_Calories <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
@@ -266,8 +267,9 @@ ggplot(Average_Calories, aes(x = DayOfWeek, y = Calories_Burned)) +
   geom_text(aes(label = Calories_Burned), vjust = 1.5, colour = "white") +
   labs(title="Average Calories Burned per Day")
 ```
+Figure 2 dislplays users are burning their calories at a consistent amount throughout the week, ranging from 2,200 to 2,356 calories.
 
-Average of activity minutes per day
+Figure 3: Average of Activity Minutes per Day
 ```{r}
 AveMins <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
@@ -287,8 +289,9 @@ Long_AveMins %>%
   geom_text(aes(label = Minutes), vjust = 1.5, colour = "white", size=3, position=position_dodge(.9)) +
   labs(title="Average of Activity Minutes per Day")
 ```
+Figure 3 shows a comparison of minutes spent one each activity per day throughout the week. Users spent more time doing very active activity compared to fairly active activity, 148 minutes, more than CDC's recommendation of 75 minutes per week (CDC, 2020). This suggest users lead a very active lifestyle and have a strong interest in vigorous activities.
 
-Average sedentary minutes per day
+Figure 4: Average Sedentary Minutes per Day
 ```{r}
 AveSMins <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
@@ -299,6 +302,7 @@ ggplot(AveSMins, aes(x = DayOfWeek, y = Sedentary_Minutes)) +
   geom_text(aes(label = Sedentary_Minutes), vjust = 1.5, colour = "white") +
   labs(title="Average of Sedentary Minutes per Day")
 ```
+Figure 4 depicts the sedentary minutes user spent per day throughout the week. The chart shows users spent lesser sedentary minutes on weekends as compared to weekdays. This suggest users were probably at work, and that contributed to the high sedentary minutes on the weekdays.
 
 Pie chart of daily activities
 ```{r}
@@ -516,9 +520,21 @@ ggplot(data=mergedfile) +
 ## Act: Recommendations
 
 **Recommendations**
-1. 
+1. Bellabeat could explore methods to increase data collection in regards to heart rate, sleep pattern and weight log as there were low number of participants. .....
 
-2. 
+2. The fact that users spent more time on very active activity than moderately and light activities suggests that the users have strong interest in doing vigorous activities. Company could market product's durability, comfort, functionality and features tailored to the vigorous activities such as running, jogging, swimming continous laps, playing sports or skipping with a rope.
+
+3. Average user spent 991.2 minutes or 16.53 hours of sedentary time a day....
+
+4. This suggests average users are burning 504 calories worth of exercise each day.
+
+5. Average user slept around 419.2 minutes or 7 hours per day,
+
+6. As the average users took around 39.3 minutes to fall asleep, studies suggest if someone cannot fall asleep within 15 to 20 minutes, the person should leave his or her bed. The person should engage in relaxing activities like read a boring book, stretch or breath slowly, allowing tension to dissipate, while waiting for sleepiness to come. The activities should not be stimulating or rewarding, like watching television or computers (Peters, 2020). Bellabeat product.....
+
+7. We can assume users did not move as much on Sundays, and will need extra reminder and motivation. Bellabeat could also set reminders and motivation every 2 to 3 hours if users is not on track to fulfil 10,000 steps per day. Content, info sharing......
+
+8. As users spents more sedentary minutes on weekdays, product could....
 
 
 ## References
