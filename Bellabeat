@@ -356,7 +356,7 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Calories & Total Steps")
 ```
 
-Relationship between calories burned & very active activity minutes
+Relationship between calories burned & very active minutes
 ```{r data visualization}
 ggplot(data=mergedfile) +
   geom_point(mapping=aes(x=VeryActiveMinutes, y=Calories)) + 
@@ -364,7 +364,7 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Calories & Very Active Minutes")
 ```
 
-Relationship between calories burned & fairly active activity minutes
+Relationship between calories burned & fairly active minutes
 ```{r data visualization}
 ggplot(data=mergedfile) +
   geom_point(mapping=aes(x=FairlyActiveMinutes, y=Calories)) + 
@@ -372,7 +372,7 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Calories & Fairly Active Minutes")
 ```
 
-Relationship between calories burned & lightly active activity minutes
+Relationship between calories burned & lightly active minutes
 ```{r data visualization}
 ggplot(data=mergedfile) +
   geom_point(mapping=aes(x=LightlyActiveMinutes, y=Calories)) + 
@@ -397,14 +397,60 @@ ggplot(data=mergedfile) +
 ```
 
 Relationship between total minutes asleep & total steps
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=TotalSteps)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=TotalSteps)) + 
+  labs(title="Relationship between Total Minutes Asleep & Total Steps")
+```
 
+Relationship between total minutes asleep & very active minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=VeryActiveMinutes)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=VeryActiveMinutes)) + 
+  labs(title="Relationship between Total Minutes Asleep & Very Active Minutes")
+```
 
-Relationship between total minutes asleep & sedentary minutes/activity minutes
+Relationship between total minutes asleep & fairly active minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=FairlyActiveMinutes)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=FairlyActiveMinutes)) + 
+  labs(title="Relationship between Total Minutes Asleep & Fairly Active Minutes")
+```
+
+Relationship between total minutes asleep & lightly active minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=LightlyActiveMinutes)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=LightlyActiveMinutes)) + 
+  labs(title="Relationship between Total Minutes Asleep & Lightly Active Minutes")
+```
+
+Relationship between total minutes asleep & sedentary minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
+  labs(title="Relationship between Total Minutes Asleep & Sedentary Minutes")
+```
 
 Relationship between total minutes asleep & calories burned
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
+  labs(title="Relationship between Total Minutes Asleep & Calories Burned")
+```
 
 Relationship total minutes asleep & heart rate
-
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=TotalMinutesAsleep, y=AverageHeartRate)) + 
+  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=AverageHeartRate)) + 
+  labs(title="Relationship between Total Minutes Asleep & Heart Rate")
+```
 
 
 Relationship between minutes to fall asleep & total steps
