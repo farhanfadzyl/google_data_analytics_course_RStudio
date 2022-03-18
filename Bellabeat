@@ -145,8 +145,13 @@ heartrate4 <- heartrate3 %>%
   mutate(DayOfWeek = factor(DayOfWeek, levels= c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))
 
 sleep4 <- sleep3 %>%
-  select(DayOfWeek, TotalMinutesAsleep, TotalTimeInBed ) %>%
+  select(DayOfWeek, TotalMinutesAsleep, TotalTimeInBed) %>%
   mutate(DayOfWeek = factor(DayOfWeek, levels= c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))
+```
+
+Adding "Minutes to Fall Asleep" Column
+```{r Adding "Minutes to Fall Asleep" column}
+sleep4$MinutesToFallAsleep <-with(sleep4,TotalTimeInBed - TotalMinutesAsleep)
 ```
 
 
@@ -319,13 +324,29 @@ ggplot(AveHR, aes(x = DayOfWeek, y = Average_Heart_Rate)) +
   labs(title="Average Heart Rate per Day")
 ```
 
-Average total minutes asleep per day
+Average minutes asleep per day
+```{r}
+AveSleep <- sleep4 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Minutes_Asleep =round(mean(TotalMinutesAsleep), digits=0))
 
-
+ggplot(AveSleep, aes(x = DayOfWeek, y = Minutes_Asleep)) +
+  geom_col() +
+  geom_text(aes(label = Minutes_Asleep), vjust = 1.5, colour = "white") +
+  labs(title="Average Minutes Asleep per Day")
+```
 
 Average minutes to fall asleep per day
+```{r}
+MinsToSleep <- sleep4 %>%
+  group_by(DayOfWeek) %>%
+  summarize(Minutes_To_Fall_Asleep =round(mean(MinutesToFallAsleep), digits=0))
 
-
+ggplot(MinsToSleep, aes(x = DayOfWeek, y = Minutes_To_Fall_Asleep)) +
+  geom_col() +
+  geom_text(aes(label = Minutes_To_Fall_Asleep), vjust = 1.5, colour = "white") +
+  labs(title="Average Minutes to Fall Asleep per Day")
+```
 
 Relationship between calories burned & total steps
 ```{r data visualization}
@@ -335,7 +356,31 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Calories & Total Steps")
 ```
 
-Relationship between calories burned & sedentary minutes/activity minutes
+Relationship between calories burned & very active activity minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=VeryActiveMinutes, y=Calories)) + 
+  geom_smooth(mapping=aes(x=VeryActiveMinutes, y=Calories)) + 
+  labs(title="Relationship between Calories & Very Active Minutes")
+```
+
+Relationship between calories burned & fairly active activity minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=FairlyActiveMinutes, y=Calories)) + 
+  geom_smooth(mapping=aes(x=FairlyActiveMinutes, y=Calories)) + 
+  labs(title="Relationship between Calories & Fairly Active Minutes")
+```
+
+Relationship between calories burned & lightly active activity minutes
+```{r data visualization}
+ggplot(data=mergedfile) +
+  geom_point(mapping=aes(x=LightlyActiveMinutes, y=Calories)) + 
+  geom_smooth(mapping=aes(x=LightlyActiveMinutes, y=Calories)) + 
+  labs(title="Relationship between Calories & Lightly Active Minutes")
+```
+
+Relationship between calories burned & sedentary minutes
 ```{r data visualization}
 ggplot(data=mergedfile) +
   geom_point(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
@@ -351,9 +396,8 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Calories & Average Heart Rate")
 ```
 
-
-
 Relationship between total minutes asleep & total steps
+
 
 Relationship between total minutes asleep & sedentary minutes/activity minutes
 
