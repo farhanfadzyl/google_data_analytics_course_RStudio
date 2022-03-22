@@ -12,6 +12,8 @@ install.packages("stringi")
 install.packages("tidyverse")
 install.packages("skimr")
 install.packages("janitor")
+install.packages("ggplot2")
+install.packages("ggpubr")
 ```
 
 ```{r load packages}
@@ -19,6 +21,8 @@ library(stringi)
 library(tidyverse)
 library(skimr)
 library(janitor)
+library(ggplot2)
+library(ggpubr)
 ```
 
 
@@ -289,7 +293,7 @@ Long_AveMins %>%
   geom_text(aes(label = Minutes), vjust = 1.5, colour = "white", size=3, position=position_dodge(.9)) +
   labs(title="Average of Activity Minutes per Day")
 ```
-Figure 3 shows a comparison of minutes spent one each activity per day throughout the week. Users spent more time doing very active activity compared to fairly active activity, 148 minutes, more than CDC's recommendation of 75 minutes per week (CDC, 2020). This suggest users lead a very active lifestyle and have a strong interest in vigorous activities.
+Figure 3 shows a comparison of minutes spent on each activity per day throughout the week. Users spent more time doing very active activity compared to fairly active activity, 148 minutes, more than CDC's recommendation of 75 minutes of very active activity per week (CDC, 2020). This suggest users lead a very active lifestyle and have a strong interest in vigorous activities.
 
 Figure 4: Average Sedentary Minutes per Day
 ```{r}
@@ -304,9 +308,8 @@ ggplot(AveSMins, aes(x = DayOfWeek, y = Sedentary_Minutes)) +
 ```
 Figure 4 depicts the sedentary minutes user spent per day throughout the week. The chart shows users spent lesser sedentary minutes on weekends as compared to weekdays. This suggest users were probably at work, and that contributed to the high sedentary minutes on the weekdays.
 
-Pie chart of daily activities
+Figure 5: Percentage of Time Spent in Different Levels of Activity
 ```{r}
-
 AveMinsPie <- mergedfile2 %>%
   summarize(Very_Active=round(mean(VeryActiveMinutes), digits=0),
             Fairly_Active=round(mean(FairlyActiveMinutes), digits=0),
@@ -314,11 +317,22 @@ AveMinsPie <- mergedfile2 %>%
             Sedentary=round(mean(SedentaryMinutes), digits=0)
             )
 
-print(AveMinsPie)
+Long_AveMinsPie <- pivot_longer(AveMinsPie, cols=everything())
 
+Long_AveMinsPie2 <- plyr::rename(Long_AveMinsPie, c("name" = "Activity",
+                                                    "value" = "Minutes"))
+  
+# Calculate percentages
+pct <- round(100*Long_AveMinsPie2$Minutes/1440)
+# Draw pie chart
+pie(Long_AveMinsPie2$Minutes,
+    labels = paste(Long_AveMinsPie2$Activity, sep = " ", pct, "%"), 
+    col = rainbow(length(Long_AveMinsPie2$Activity)), 
+    main = "Percentage of Time Spent in Different Levels of Activity Daily")
 ```
+Figure 5 shows that users spent 81% of their time daily on sedentary activity.
 
-Average heart rate per day
+Figure 6: Average Heart Rate per Day
 ```{r}
 AveHR <- heartrate4 %>%
   group_by(DayOfWeek) %>%
@@ -329,8 +343,9 @@ ggplot(AveHR, aes(x = DayOfWeek, y = Average_Heart_Rate)) +
   geom_text(aes(label = Average_Heart_Rate), vjust = 1.5, colour = "white") +
   labs(title="Average Heart Rate per Day")
 ```
+Figure 6 shows that users maintained a consistent heart rate, ranging from 77 to 81 bpm, throughtout the week. Users tend to have a higher heart rate on Saturdays.
 
-Average minutes asleep per day
+Figure 7: Average Minutes Asleep per Day
 ```{r}
 AveSleep <- sleep4 %>%
   group_by(DayOfWeek) %>%
@@ -341,8 +356,9 @@ ggplot(AveSleep, aes(x = DayOfWeek, y = Minutes_Asleep)) +
   geom_text(aes(label = Minutes_Asleep), vjust = 1.5, colour = "white") +
   labs(title="Average Minutes Asleep per Day")
 ```
+Figure 7 shows users tend to sleep least on Thursday with 401 minutes (6 hours 41 minutes) of sleep, and sleep most on Sundays with 453 minutes (7 hours 33 minutes) of sleep. This suggests that users tend to sleep earlier on Sundays as the following day could be a working day.
 
-Average minutes to fall asleep per day
+Figure 8: Average Minutes to Fall Asleep per Day
 ```{r}
 MinsToSleep <- sleep4 %>%
   group_by(DayOfWeek) %>%
@@ -353,54 +369,117 @@ ggplot(MinsToSleep, aes(x = DayOfWeek, y = Minutes_To_Fall_Asleep)) +
   geom_text(aes(label = Minutes_To_Fall_Asleep), vjust = 1.5, colour = "white") +
   labs(title="Average Minutes to Fall Asleep per Day")
 ```
+Figure 8 shows that users spent the longest time, 51 minutes, to fall asleep on Sundays.
 
-Relationship between calories burned & total steps
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalSteps, y=Calories)) + 
-  geom_smooth(mapping=aes(x=TotalSteps, y=Calories)) + 
-  labs(title="Relationship between Calories & Total Steps")
+Figure 9.1: Relationship between Calories Burned & Total Steps
+```{r}
+ggplot(mergedfile, aes(x=TotalSteps, y=Calories)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Total Steps") +
+   ylab("Calories") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 25000, label.y = 2300) +
+  stat_cor(aes(label=..rr.label..), label.x=25000, label.y=2000) +
+  labs(title="Relationship between Calories Burned & Total Steps")
 ```
 
-Relationship between calories burned & very active minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=VeryActiveMinutes, y=Calories)) + 
-  geom_smooth(mapping=aes(x=VeryActiveMinutes, y=Calories)) + 
-  labs(title="Relationship between Calories & Very Active Minutes")
+Figure 9.2: Residual Plots of Calories Burned & Total Steps
+```{r}
+# Residual Plots
+calstepsRegression <- lm(Calories ~ TotalSteps, data = mergedfile)
+plot(residuals(calstepsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
 ```
 
-Relationship between calories burned & fairly active minutes
+Figure 9.1 shows that the calories burned and total steps has a positive correlation coefficient of 0.56, and the strength of correlation is moderate. However, the coefficient of determination is 0.35, which is generally considered a weak or low effect size (Moore et al., 2013). Despite the low coefficient of determination, the quality of the coefficient depends on several factors, and it is not always the case that a high r-squared is good for the regression model. Therefore, the insights from the statistical metric can vary (Corporate Finance Institute, 2021). Figure 9.1 also indicates the p-value is 2.2e-16, which is statistically significant as the p-value is lower than the usual significance level of 0.05. This signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019).
+
+Figure 9.2 depicts that the residuals are random in regression analysis as the data are randomly scattered around zero for the entire range of fitted values. When the residuals center on zero, they indicate that the model’s predictions are correct on average rather than systematically too high or low (Frost, 2019). This suggets the estimates are unbiased.
+
+Figure 10.1: Relationship between Calories Burned & Very Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=FairlyActiveMinutes, y=Calories)) + 
-  geom_smooth(mapping=aes(x=FairlyActiveMinutes, y=Calories)) + 
-  labs(title="Relationship between Calories & Fairly Active Minutes")
+ggplot(mergedfile, aes(x=VeryActiveMinutes, y=Calories)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Very Active Minutes") +
+   ylab("Calories") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 100, label.y = 2300) +
+  stat_cor(aes(label=..rr.label..), label.x=100, label.y=2000) +
+  labs(title="Relationship between Calories Burned & Very Active Minutes")
 ```
 
-Relationship between calories burned & lightly active minutes
+Figure 10.2: Residual Plots of Calories Burned & Very Active Minutes
+```{r}
+# Residual Plots
+CalVAMinsRegression <- lm(VeryActiveMinutes ~ TotalSteps, data = mergedfile)
+plot(residuals(CalVAMinsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
+```
+ 
+Figure 11.1: Relationship between Calories Burned & Fairly Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=LightlyActiveMinutes, y=Calories)) + 
-  geom_smooth(mapping=aes(x=LightlyActiveMinutes, y=Calories)) + 
-  labs(title="Relationship between Calories & Lightly Active Minutes")
+ggplot(mergedfile, aes(x=FairlyActiveMinutes, y=Calories)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Fairly Active Minutes") +
+   ylab("Calories") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 100, label.y = 2300) +
+  stat_cor(aes(label=..rr.label..), label.x=100, label.y=2000) +
+  labs(title="Relationship between Calories Burned & Fairly Active Minutes")
 ```
 
-Relationship between calories burned & sedentary minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
-  geom_smooth(mapping=aes(x=SedentaryMinutes, y=Calories)) + 
-  labs(title="Relationship between Calories & Sedentary Minutes")
+Figure 11.2: Residual Plots of Calories Burned & Fairly Active Minutes
+```{r}
+# Residual Plots
+CalFAMinsRegression <- lm(FairlyActiveMinutes ~ TotalSteps, data = mergedfile)
+plot(residuals(CalFAMinsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
 ```
 
-Relationship calories burned & heart rate
+Figure 12.1: Relationship between Calories Burned & Lightly Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=AverageHeartRate, y=Calories)) + 
-  geom_smooth(mapping=aes(x=AverageHeartRate, y=Calories)) + 
-  labs(title="Relationship between Calories & Average Heart Rate")
+ggplot(mergedfile, aes(x=LightlyActiveMinutes, y=Calories)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Lightly Active Minutes") +
+   ylab("Calories") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 300, label.y = 1000) +
+  stat_cor(aes(label=..rr.label..), label.x=300, label.y=700) +
+  labs(title="Relationship between Calories Burned & Lightly Active Minutes")
 ```
+
+Figure 12.2: Residual Plots of Calories Burned & Lightly Active Minutes
+```{r}
+# Residual Plots
+CalLAMinsRegression <- lm(LightlyActiveMinutes ~ TotalSteps, data = mergedfile)
+plot(residuals(CalLAMinsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
+```
+
+Figure 13.1: Relationship between Calories Burned & Sedentary Minutes
+```{r data visualization}
+ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Sedentary Minutes") +
+   ylab("Calories") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 1050, label.y = 900) +
+  stat_cor(aes(label=..rr.label..), label.x=1050, label.y=700) +
+  labs(title="Relationship between Calories Burned & Sedentary Minutes")
+```
+
+Figure 13.2: Residual Plots of Calories Burned & Sedentary Minutes
+```{r}
+# Residual Plots
+CalSMinsRegression <- lm(SedentaryMinutes ~ TotalSteps, data = mergedfile)
+plot(residuals(CalSMinsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
+```
+
 
 
 Relationship between total minutes asleep & total steps
@@ -449,14 +528,6 @@ ggplot(data=mergedfile) +
   geom_point(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
   geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
   labs(title="Relationship between Total Minutes Asleep & Calories Burned")
-```
-
-Relationship total minutes asleep & heart rate
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=AverageHeartRate)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=AverageHeartRate)) + 
-  labs(title="Relationship between Total Minutes Asleep & Heart Rate")
 ```
 
 
@@ -508,13 +579,6 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Minutes to Fall Asleep & Calories Burned")
 ```
 
-Relationship between minutes to fall asleep & heart rate
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=AverageHeartRate)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=AverageHeartRate)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Heart Rate")
-```
 
 
 ## Act: Recommendations
@@ -549,7 +613,13 @@ Centers for Disease Control and Prevention. (2020, September 17). Assessing Your
 
 Centers for Disease Control and Prevention. (2020, October 7). How much physical activity do adults need? https://www.cdc.gov/physicalactivity/basics/adults/index.htm
 
+Corporate Finance Institute. (2021, July 28). Coefficient of Determination. https://corporatefinanceinstitute.com/resources/knowledge/other/coefficient-of-determination/
+
+Frost, J. (2019, March 15). Check Your Residual Plots to Ensure Trustworthy Regression Results! Statistics By Jim. https://statisticsbyjim.com/regression/check-residual-plots-regression-analysis/
+
 Laskowski, E. R. (2020, October 2). Heart rate: What’s normal? Mayo Clinic. https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979?reDate=15032022
+
+Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.). New York, NY: W. H. Freeman and Company. Page (138).
 
 Park J. H., Moon J. H., Kim H. J., Kong M. H., Oh Y. H. (2020). Sedentary lifestyle: overview of updated evidence of potential health risks. Korean J. Fam. Med. 41 365–373. 10.4082/KJFM.20.0165
 
