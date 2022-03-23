@@ -279,8 +279,7 @@ AveMins <- mergedfile3 %>%
   group_by(DayOfWeek) %>%
   summarize(Very_Active=round(mean(VeryActiveMinutes), digits=0),
             Fairly_Active=round(mean(FairlyActiveMinutes), digits=0),
-            Lightly_Active=round(mean(LightlyActiveMinutes), digits=0)
-            )
+            Lightly_Active=round(mean(LightlyActiveMinutes), digits=0))
 
 Long_AveMins <- AveMins %>%
   pivot_longer(cols = -DayOfWeek, names_to = "Activity", values_to = "Minutes") %>%
@@ -387,8 +386,8 @@ ggplot(mergedfile, aes(x=TotalSteps, y=Calories)) +
 Figure 9.2: Residual Plots of Calories Burned & Total Steps
 ```{r}
 # Residual Plots
-calstepsRegression <- lm(Calories ~ TotalSteps, data = mergedfile)
-plot(residuals(calstepsRegression) ~ TotalSteps, data = mergedfile)
+CalStepsRegression <- lm(Calories ~ TotalSteps, data = mergedfile)
+plot(residuals(CalStepsRegression) ~ TotalSteps, data = mergedfile)
 abline(h=0)
 ```
 
@@ -412,8 +411,8 @@ ggplot(mergedfile, aes(x=VeryActiveMinutes, y=Calories)) +
 Figure 10.2: Residual Plots of Calories Burned & Very Active Minutes
 ```{r}
 # Residual Plots
-CalVAMinsRegression <- lm(VeryActiveMinutes ~ TotalSteps, data = mergedfile)
-plot(residuals(CalVAMinsRegression) ~ TotalSteps, data = mergedfile)
+CalVAMinsRegression <- lm(Calories ~ VeryActiveMinutes, data = mergedfile)
+plot(residuals(CalVAMinsRegression) ~ VeryActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
  
@@ -433,8 +432,8 @@ ggplot(mergedfile, aes(x=FairlyActiveMinutes, y=Calories)) +
 Figure 11.2: Residual Plots of Calories Burned & Fairly Active Minutes
 ```{r}
 # Residual Plots
-CalFAMinsRegression <- lm(FairlyActiveMinutes ~ TotalSteps, data = mergedfile)
-plot(residuals(CalFAMinsRegression) ~ TotalSteps, data = mergedfile)
+CalFAMinsRegression <- lm(Calories ~ FairlyActiveMinutes, data = mergedfile)
+plot(residuals(CalFAMinsRegression) ~ FairlyActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
 
@@ -454,8 +453,8 @@ ggplot(mergedfile, aes(x=LightlyActiveMinutes, y=Calories)) +
 Figure 12.2: Residual Plots of Calories Burned & Lightly Active Minutes
 ```{r}
 # Residual Plots
-CalLAMinsRegression <- lm(LightlyActiveMinutes ~ TotalSteps, data = mergedfile)
-plot(residuals(CalLAMinsRegression) ~ TotalSteps, data = mergedfile)
+CalLAMinsRegression <- lm(Calories ~ LightlyActiveMinutes, data = mergedfile)
+plot(residuals(CalLAMinsRegression) ~ LightlyActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
 
@@ -468,15 +467,63 @@ ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
    ylab("Calories") +    
    geom_smooth(method = lm) +
   stat_cor(method = "spearman", label.x = 1050, label.y = 900) +
-  stat_cor(aes(label=..rr.label..), label.x=1050, label.y=700) +
+  stat_cor(aes(label=..rr.label..), label.x=1050, label.y=600) +
   labs(title="Relationship between Calories Burned & Sedentary Minutes")
 ```
 
 Figure 13.2: Residual Plots of Calories Burned & Sedentary Minutes
 ```{r}
 # Residual Plots
-CalSMinsRegression <- lm(SedentaryMinutes ~ TotalSteps, data = mergedfile)
-plot(residuals(CalSMinsRegression) ~ TotalSteps, data = mergedfile)
+CalSMinsRegression <- lm(Calories ~ SedentaryMinutes, data = mergedfile)
+plot(residuals(CalSMinsRegression) ~ SedentaryMinutes, data = mergedfile)
+abline(h=0)
+```
+
+Comment for Calories & Activity
+
+
+
+
+
+Figure 14.1: Relationship between Minutes Asleep & Calories Burned
+```{r data visualization}
+ggplot(mergedfile, aes(x=Calories, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Calories Burned") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 3900, label.y = 140) +
+  stat_cor(aes(label=..rr.label..), label.x=3900, label.y=90) +
+  labs(title="Relationship between Minutes Asleep & Calories Burned")
+```
+
+Figure 14.2: Residual Plots of Minutes Asleep & Calories Burned
+```{r}
+# Residual Plots
+SleepCalRegression <- lm(TotalMinutesAsleep ~ Calories, data = mergedfile)
+plot(residuals(SleepCalRegression) ~ Calories, data = mergedfile)
+abline(h=0)
+```
+
+Figure 15.1: Relationship between Minutes Asleep & Total Steps
+```{r data visualization}
+ggplot(mergedfile, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Total Steps") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 21000, label.y = 140) +
+  stat_cor(aes(label=..rr.label..), label.x=21000, label.y=90) +
+  labs(title="Relationship between Minutes Asleep & Total Steps")
+```
+
+Figure 15.2: Residual Plots of Minutes Asleep & Total Steps
+```{r}
+# Residual Plots
+SleepStepsRegression <- lm(TotalMinutesAsleep ~ TotalSteps, data = mergedfile)
+plot(residuals(SleepStepsRegression) ~ TotalSteps, data = mergedfile)
 abline(h=0)
 ```
 
@@ -522,13 +569,11 @@ ggplot(data=mergedfile) +
   labs(title="Relationship between Total Minutes Asleep & Sedentary Minutes")
 ```
 
-Relationship between total minutes asleep & calories burned
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=Calories)) + 
-  labs(title="Relationship between Total Minutes Asleep & Calories Burned")
-```
+
+
+
+
+
 
 
 Relationship between minutes to fall asleep & total steps
