@@ -36,6 +36,7 @@ sleep <- read_csv("sleepDay_merged.csv")
 sleep2 <- read_csv("2_dailysleep.csv")
 weightlog <- read_csv("weightLogInfo_merged.csv")
 mergedfile <- read_csv("daily_activity_sleep_weightlog_heartrate_merged.csv")
+activitysleep <- read_csv("activity_sleep.csv")
 ```
 
 
@@ -160,6 +161,10 @@ sleep4$MinutesToFallAsleep <-with(sleep4,TotalTimeInBed - TotalMinutesAsleep)
 mergedfile$MinutesToFallAsleep <-with(mergedfile,TotalTimeInBed - TotalMinutesAsleep)
 ```
 
+Remove rows where "TotalMinutesAsleep" column is Null
+```{r}
+activitysleep_cleaned <- activitysleep[complete.cases(activitysleep[ , c('TotalMinutesAsleep')]), ] 
+```
 
 ## Analyze: Summary statistics
 
@@ -479,7 +484,7 @@ plot(residuals(CalSMinsRegression) ~ SedentaryMinutes, data = mergedfile)
 abline(h=0)
 ```
 
-Comment for Calories & Activity
+Comment for Calories & Total Steps/Activities
 
 
 
@@ -487,142 +492,261 @@ Comment for Calories & Activity
 
 Figure 14.1: Relationship between Minutes Asleep & Calories Burned
 ```{r data visualization}
-ggplot(mergedfile, aes(x=Calories, y=TotalMinutesAsleep)) +
+ggplot(activitysleep_cleaned, aes(x=Calories, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
    xlab("Calories Burned") +
    ylab("Minutes Asleep") +    
    geom_smooth(method = lm) +
-  stat_cor(method = "spearman", label.x = 3900, label.y = 140) +
-  stat_cor(aes(label=..rr.label..), label.x=3900, label.y=90) +
+  stat_cor(method = "spearman", label.x = 3900, label.y = 320) +
+  stat_cor(aes(label=..rr.label..), label.x=3900, label.y=290) +
   labs(title="Relationship between Minutes Asleep & Calories Burned")
 ```
 
 Figure 14.2: Residual Plots of Minutes Asleep & Calories Burned
 ```{r}
 # Residual Plots
-SleepCalRegression <- lm(TotalMinutesAsleep ~ Calories, data = mergedfile)
-plot(residuals(SleepCalRegression) ~ Calories, data = mergedfile)
+SleepCalRegression <- lm(TotalMinutesAsleep ~ Calories, data = activitysleep_cleaned)
+plot(residuals(SleepCalRegression) ~ Calories, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
 Figure 15.1: Relationship between Minutes Asleep & Total Steps
 ```{r data visualization}
-ggplot(mergedfile, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
+ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
    xlab("Total Steps") +
    ylab("Minutes Asleep") +    
    geom_smooth(method = lm) +
-  stat_cor(method = "spearman", label.x = 21000, label.y = 140) +
-  stat_cor(aes(label=..rr.label..), label.x=21000, label.y=90) +
+  stat_cor(method = "spearman", label.x = 17000, label.y = 280) +
+  stat_cor(aes(label=..rr.label..), label.x=17000, label.y=240) +
   labs(title="Relationship between Minutes Asleep & Total Steps")
 ```
 
 Figure 15.2: Residual Plots of Minutes Asleep & Total Steps
 ```{r}
 # Residual Plots
-SleepStepsRegression <- lm(TotalMinutesAsleep ~ TotalSteps, data = mergedfile)
-plot(residuals(SleepStepsRegression) ~ TotalSteps, data = mergedfile)
+SleepStepsRegression <- lm(TotalMinutesAsleep ~ TotalSteps, data = activitysleep_cleaned)
+plot(residuals(SleepStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-
-
-Relationship between total minutes asleep & total steps
+Figure 16.1: Relationship between Minutes Asleep & Very Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=TotalSteps)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=TotalSteps)) + 
-  labs(title="Relationship between Total Minutes Asleep & Total Steps")
+ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Very Active Minutes") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 150, label.y = 290) +
+  stat_cor(aes(label=..rr.label..), label.x=150, label.y=250) +
+  labs(title="Relationship between Minutes Asleep & Very Active Minutes")
 ```
 
-Relationship between total minutes asleep & very active minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=VeryActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=VeryActiveMinutes)) + 
-  labs(title="Relationship between Total Minutes Asleep & Very Active Minutes")
+Figure 16.2: Residual Plots of Minutes Asleep & Very Active Minutes
+```{r}
+# Residual Plots
+SleepVAMinsRegression <- lm(TotalMinutesAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
 ```
 
-Relationship between total minutes asleep & fairly active minutes
+Figure 17.1: Relationship between Minutes Asleep & Fairly Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=FairlyActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=FairlyActiveMinutes)) + 
-  labs(title="Relationship between Total Minutes Asleep & Fairly Active Minutes")
+ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Fairly Active Minutes") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 110, label.y = 140) +
+  stat_cor(aes(label=..rr.label..), label.x=110, label.y=90) +
+  labs(title="Relationship between Minutes Asleep & Fairly Active Minutes")
 ```
 
-Relationship between total minutes asleep & lightly active minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=LightlyActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=LightlyActiveMinutes)) + 
-  labs(title="Relationship between Total Minutes Asleep & Lightly Active Minutes")
+Figure 17.2: Residual Plots of Minutes Asleep & Fairly Active Minutes
+```{r}
+# Residual Plots
+SleepFAMinsRegression <- lm(TotalMinutesAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
 ```
 
-Relationship between total minutes asleep & sedentary minutes
+Figure 18.1: Relationship between Minutes Asleep & Lightly Active Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
-  geom_smooth(mapping=aes(x=TotalMinutesAsleep, y=SedentaryMinutes)) + 
-  labs(title="Relationship between Total Minutes Asleep & Sedentary Minutes")
+ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Lightly Active Minutes") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 400, label.y = 320) +
+  stat_cor(aes(label=..rr.label..), label.x=400, label.y=280) +
+  labs(title="Relationship between Minutes Asleep & Lightly Active Minutes")
 ```
 
-
-
-
-
-
-
-
-Relationship between minutes to fall asleep & total steps
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=TotalSteps)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=TotalSteps)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Total Steps")
+Figure 18.2: Residual Plots of Minutes Asleep & Lightly Active Minutes
+```{r}
+# Residual Plots
+SleepLAMinsRegression <- lm(TotalMinutesAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
 ```
 
-Relationship between minutes to fall asleep & very active minutes
+Figure 19.1: Relationship between Minutes Asleep & Sedentary Minutes
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=VeryActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=VeryActiveMinutes)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Very Active Minutes")
+ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=TotalMinutesAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Sedentary Minutes") +
+   ylab("Minutes Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 250, label.y = 210) +
+  stat_cor(aes(label=..rr.label..), label.x=250, label.y=170) +
+  labs(title="Relationship between Minutes Asleep & Sedentary Minutes")
 ```
 
-Relationship between minutes to fall asleep & fairly active minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=FairlyActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=FairlyActiveMinutes)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Fairly Active Minutes")
+Figure 19.2: Residual Plots of Minutes Asleep & Sedentary Minutes
+```{r}
+# Residual Plots
+SleepSMinsRegression <- lm(TotalMinutesAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
+abline(h=0)
 ```
 
-Relationship between minutes to fall asleep & lightly active minutes
+Comment for Minutes Asleep & Calories/Total Steps/Activities
+
+
+Figure 20.1: Relationship between Minutes Awake Before Asleep & Calories Burned
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=LightlyActiveMinutes)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=LightlyActiveMinutes)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Lightly Active Minutes")
+ggplot(activitysleep_cleaned, aes(x=Calories, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Calories Burned") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 3500, label.y = 130) +
+  stat_cor(aes(label=..rr.label..), label.x=3500, label.y=110) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Calories Burned")
 ```
 
-Relationship between minutes to fall asleep & sedentary minutes
-```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=SedentaryMinutes)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=SedentaryMinutes)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Sedentary Minutes")
+Figure 20.2: Residual Plots of Minutes Awake Before Asleep & Calories Burned
+```{r}
+# Residual Plots
+AwakeCalRegression <- lm(MinutesAwakeBeforeAsleep ~ Calories, data = activitysleep_cleaned)
+plot(residuals(AwakeCalRegression) ~ Calories, data = activitysleep_cleaned)
+abline(h=0)
 ```
 
-Relationship between minutes to fall asleep & calories burned
+Figure 21.1: Relationship between Minutes Awake Before Asleep & Total Steps
 ```{r data visualization}
-ggplot(data=mergedfile) +
-  geom_point(mapping=aes(x=MinutesToFallAsleep, y=Calories)) + 
-  geom_smooth(mapping=aes(x=MinutesToFallAsleep, y=Calories)) + 
-  labs(title="Relationship between Minutes to Fall Asleep & Calories Burned")
+ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Total Steps") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 18000, label.y = 110) +
+  stat_cor(aes(label=..rr.label..), label.x=18000, label.y=80) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Total Steps")
 ```
+
+Figure 21.2: Residual Plots of Minutes Awake Before Asleep & Total Steps
+```{r}
+# Residual Plots
+AwakeStepsRegression <- lm(MinutesAwakeBeforeAsleep ~ TotalSteps, data = activitysleep_cleaned)
+plot(residuals(AwakeStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
+abline(h=0)
+```
+
+Figure 22.1: Relationship between Minutes Awake Before Asleep & Very Active Minutes
+```{r data visualization}
+ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Very Active Minutes") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 150, label.y = 110) +
+  stat_cor(aes(label=..rr.label..), label.x=150, label.y=80) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Very Active Minutes")
+```
+
+Figure 22.2: Residual Plots of Minutes Awake Before Asleep & Very Active Minutes
+```{r}
+# Residual Plots
+AwakeVAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
+```
+
+Figure 23.1: Relationship between Minutes Awake Before Asleep & Fairly Active Minutes
+```{r data visualization}
+ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Fairly Active Minutes") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 110, label.y = 70) +
+  stat_cor(aes(label=..rr.label..), label.x=110, label.y=50) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Fairly Active Minutes")
+```
+
+Figure 23.2: Residual Plots of Minutes Awake Before Asleep & Fairly Active Minutes
+```{r}
+# Residual Plots
+AwakeFAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
+```
+
+Figure 24.1: Relationship between Minutes Awake Before Asleep & Lightly Active Minutes
+```{r data visualization}
+ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Lightly Active Minutes") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 400, label.y = 110) +
+  stat_cor(aes(label=..rr.label..), label.x=400, label.y=90) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Lightly Active Minutes")
+```
+
+Figure 24.2: Residual Plots of Minutes Awake Before Asleep & Lightly Active Minutes
+```{r}
+# Residual Plots
+AwakeLAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+abline(h=0)
+```
+
+Figure 25.1: Relationship between Minutes Awake Before Asleep & Sedentary Minutes
+```{r data visualization}
+ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep)) +
+   geom_point() +
+   theme_minimal() +
+   xlab("Sedentary Minutes") +
+   ylab("Minutes Awake Before Asleep") +    
+   geom_smooth(method = lm) +
+  stat_cor(method = "spearman", label.x = 900, label.y = 110) +
+  stat_cor(aes(label=..rr.label..), label.x=900, label.y=90) +
+  labs(title="Relationship between Minutes Awake Before Asleep & Sedentary Minutes")
+```
+
+Figure 25.2: Residual Plots of Minutes Awake Before Asleep & Sedentary Minutes
+```{r}
+# Residual Plots
+AwakeSMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
+abline(h=0)
+```
+
+Comment for Minutes Awake Before Asleep & Calories/Total Steps/Activities
+
 
 
 
