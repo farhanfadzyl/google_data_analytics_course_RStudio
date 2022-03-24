@@ -375,7 +375,18 @@ ggplot(MinsToSleep, aes(x = DayOfWeek, y = Minutes_To_Fall_Asleep)) +
 ```
 Figure 8 shows that users spent the longest time, 51 minutes, to fall asleep on Sundays.
 
-Figure 9.1: Relationship between Calories Burned & Total Steps
+
+**Calories as Fixed Variable**
+
+Figure 9.1: Residual Plots of Calories Burned & Total Steps
+```{r}
+# Residual Plots
+CalStepsRegression <- lm(Calories ~ TotalSteps, data = mergedfile)
+plot(residuals(CalStepsRegression) ~ TotalSteps, data = mergedfile)
+abline(h=0)
+```
+
+Figure 9.2: Relationship between Calories Burned & Total Steps
 ```{r}
 ggplot(mergedfile, aes(x=TotalSteps, y=Calories)) +
    geom_point() +
@@ -388,19 +399,15 @@ ggplot(mergedfile, aes(x=TotalSteps, y=Calories)) +
   labs(title="Relationship between Calories Burned & Total Steps")
 ```
 
-Figure 9.2: Residual Plots of Calories Burned & Total Steps
+Figure 10.1: Residual Plots of Calories Burned & Very Active Minutes
 ```{r}
 # Residual Plots
-CalStepsRegression <- lm(Calories ~ TotalSteps, data = mergedfile)
-plot(residuals(CalStepsRegression) ~ TotalSteps, data = mergedfile)
+CalVAMinsRegression <- lm(Calories ~ VeryActiveMinutes, data = mergedfile)
+plot(residuals(CalVAMinsRegression) ~ VeryActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
 
-Figure 9.1 shows that the calories burned and total steps has a positive correlation coefficient of 0.56, and the strength of correlation is moderate. However, the coefficient of determination is 0.35, which is generally considered a weak or low effect size (Moore et al., 2013). Despite the low coefficient of determination, the quality of the coefficient depends on several factors, and it is not always the case that a high r-squared is good for the regression model. Therefore, the insights from the statistical metric can vary (Corporate Finance Institute, 2021). Figure 9.1 also indicates the p-value is 2.2e-16, which is statistically significant as the p-value is lower than the usual significance level of 0.05. This signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019).
-
-Figure 9.2 depicts that the residuals are random in regression analysis as the data are randomly scattered around zero for the entire range of fitted values. When the residuals center on zero, they indicate that the model’s predictions are correct on average rather than systematically too high or low (Frost, 2019). This suggets the estimates are unbiased.
-
-Figure 10.1: Relationship between Calories Burned & Very Active Minutes
+Figure 10.2: Relationship between Calories Burned & Very Active Minutes
 ```{r data visualization}
 ggplot(mergedfile, aes(x=VeryActiveMinutes, y=Calories)) +
    geom_point() +
@@ -413,15 +420,15 @@ ggplot(mergedfile, aes(x=VeryActiveMinutes, y=Calories)) +
   labs(title="Relationship between Calories Burned & Very Active Minutes")
 ```
 
-Figure 10.2: Residual Plots of Calories Burned & Very Active Minutes
+Figure 11.1: Residual Plots of Calories Burned & Fairly Active Minutes
 ```{r}
 # Residual Plots
-CalVAMinsRegression <- lm(Calories ~ VeryActiveMinutes, data = mergedfile)
-plot(residuals(CalVAMinsRegression) ~ VeryActiveMinutes, data = mergedfile)
+CalFAMinsRegression <- lm(Calories ~ FairlyActiveMinutes, data = mergedfile)
+plot(residuals(CalFAMinsRegression) ~ FairlyActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
  
-Figure 11.1: Relationship between Calories Burned & Fairly Active Minutes
+Figure 11.2: Relationship between Calories Burned & Fairly Active Minutes
 ```{r data visualization}
 ggplot(mergedfile, aes(x=FairlyActiveMinutes, y=Calories)) +
    geom_point() +
@@ -434,15 +441,15 @@ ggplot(mergedfile, aes(x=FairlyActiveMinutes, y=Calories)) +
   labs(title="Relationship between Calories Burned & Fairly Active Minutes")
 ```
 
-Figure 11.2: Residual Plots of Calories Burned & Fairly Active Minutes
+Figure 12.1: Residual Plots of Calories Burned & Lightly Active Minutes
 ```{r}
 # Residual Plots
-CalFAMinsRegression <- lm(Calories ~ FairlyActiveMinutes, data = mergedfile)
-plot(residuals(CalFAMinsRegression) ~ FairlyActiveMinutes, data = mergedfile)
+CalLAMinsRegression <- lm(Calories ~ LightlyActiveMinutes, data = mergedfile)
+plot(residuals(CalLAMinsRegression) ~ LightlyActiveMinutes, data = mergedfile)
 abline(h=0)
 ```
 
-Figure 12.1: Relationship between Calories Burned & Lightly Active Minutes
+Figure 12.2: Relationship between Calories Burned & Lightly Active Minutes
 ```{r data visualization}
 ggplot(mergedfile, aes(x=LightlyActiveMinutes, y=Calories)) +
    geom_point() +
@@ -455,15 +462,15 @@ ggplot(mergedfile, aes(x=LightlyActiveMinutes, y=Calories)) +
   labs(title="Relationship between Calories Burned & Lightly Active Minutes")
 ```
 
-Figure 12.2: Residual Plots of Calories Burned & Lightly Active Minutes
+Figure 13.1: Residual Plots of Calories Burned & Sedentary Minutes
 ```{r}
 # Residual Plots
-CalLAMinsRegression <- lm(Calories ~ LightlyActiveMinutes, data = mergedfile)
-plot(residuals(CalLAMinsRegression) ~ LightlyActiveMinutes, data = mergedfile)
+CalSMinsRegression <- lm(Calories ~ SedentaryMinutes, data = mergedfile)
+plot(residuals(CalSMinsRegression) ~ SedentaryMinutes, data = mergedfile)
 abline(h=0)
 ```
 
-Figure 13.1: Relationship between Calories Burned & Sedentary Minutes
+Figure 13.2: Relationship between Calories Burned & Sedentary Minutes
 ```{r data visualization}
 ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
    geom_point() +
@@ -476,21 +483,22 @@ ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
   labs(title="Relationship between Calories Burned & Sedentary Minutes")
 ```
 
-Figure 13.2: Residual Plots of Calories Burned & Sedentary Minutes
+With reference to the residual plots, the analysis of the relationships between calories, fairly active minutes (Figure 11.1) and sedentary minutes (Figure 13.1) will be removed due to bias, as the residuals are not normally distributed. Figure 11.1 shows a decreasing trend as the fairly active minutes variable increases, and Figure 13.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). The other residual plots (Figure 9.1, Figure 10.1 and Figure 12.1) depicts that the residuals are random in regression analysis as the data are randomly scattered around zero for the entire range of fitted values. When the residuals center on zero, they indicate that the model’s predictions are correct on average rather than systematically too high or low (Frost, 2019). This suggets the estimates are unbiased.
+
+With reference to the regression coefficient graphs between calories, total steps (Figure 9.2), very active minutes (Figure 10.2) and lightly active minutes (Figure 12.2), they indicate the graphs have a p-value of lower than 0.05 significance level, which signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019). However, the variables have a coefficient of determination of 0.35, 0.38 and 0.082, respectively,  which is generally considered a weak or low effect size (Moore et al., 2013). The variables have a positive correlation of 0.56, 0.54 and 0.29 respectively, with respect to calories variable, implying a direct relationship between the variables (Taylor, 1990). The strength of the correlation coefficient between calories, total steps (Figure 9.2) and very active minutes (Figure 10.2) are moderate while lightly active minutes (Figure 12.2) has a weak correlation.
+
+
+**Minutes Asleep as Fixed Variable**
+
+Figure 14.1: Residual Plots of Minutes Asleep & Calories Burned
 ```{r}
 # Residual Plots
-CalSMinsRegression <- lm(Calories ~ SedentaryMinutes, data = mergedfile)
-plot(residuals(CalSMinsRegression) ~ SedentaryMinutes, data = mergedfile)
+SleepCalRegression <- lm(TotalMinutesAsleep ~ Calories, data = activitysleep_cleaned)
+plot(residuals(SleepCalRegression) ~ Calories, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Comment for Calories & Total Steps/Activities
-
-
-
-
-
-Figure 14.1: Relationship between Minutes Asleep & Calories Burned
+Figure 14.2: Relationship between Minutes Asleep & Calories Burned
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=Calories, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -503,15 +511,15 @@ ggplot(activitysleep_cleaned, aes(x=Calories, y=TotalMinutesAsleep)) +
   labs(title="Relationship between Minutes Asleep & Calories Burned")
 ```
 
-Figure 14.2: Residual Plots of Minutes Asleep & Calories Burned
+Figure 15.1: Residual Plots of Minutes Asleep & Total Steps
 ```{r}
 # Residual Plots
-SleepCalRegression <- lm(TotalMinutesAsleep ~ Calories, data = activitysleep_cleaned)
-plot(residuals(SleepCalRegression) ~ Calories, data = activitysleep_cleaned)
+SleepStepsRegression <- lm(TotalMinutesAsleep ~ TotalSteps, data = activitysleep_cleaned)
+plot(residuals(SleepStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 15.1: Relationship between Minutes Asleep & Total Steps
+Figure 15.2: Relationship between Minutes Asleep & Total Steps
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -524,15 +532,15 @@ ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
   labs(title="Relationship between Minutes Asleep & Total Steps")
 ```
 
-Figure 15.2: Residual Plots of Minutes Asleep & Total Steps
+Figure 16.1: Residual Plots of Minutes Asleep & Very Active Minutes
 ```{r}
 # Residual Plots
-SleepStepsRegression <- lm(TotalMinutesAsleep ~ TotalSteps, data = activitysleep_cleaned)
-plot(residuals(SleepStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
+SleepVAMinsRegression <- lm(TotalMinutesAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 16.1: Relationship between Minutes Asleep & Very Active Minutes
+Figure 16.2: Relationship between Minutes Asleep & Very Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -545,15 +553,15 @@ ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=TotalMinutesAsleep)) +
   labs(title="Relationship between Minutes Asleep & Very Active Minutes")
 ```
 
-Figure 16.2: Residual Plots of Minutes Asleep & Very Active Minutes
+Figure 17.1: Residual Plots of Minutes Asleep & Fairly Active Minutes
 ```{r}
 # Residual Plots
-SleepVAMinsRegression <- lm(TotalMinutesAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(SleepVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
+SleepFAMinsRegression <- lm(TotalMinutesAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 17.1: Relationship between Minutes Asleep & Fairly Active Minutes
+Figure 17.2: Relationship between Minutes Asleep & Fairly Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -566,15 +574,15 @@ ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=TotalMinutesAsleep)) 
   labs(title="Relationship between Minutes Asleep & Fairly Active Minutes")
 ```
 
-Figure 17.2: Residual Plots of Minutes Asleep & Fairly Active Minutes
+Figure 18.1: Residual Plots of Minutes Asleep & Lightly Active Minutes
 ```{r}
 # Residual Plots
-SleepFAMinsRegression <- lm(TotalMinutesAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(SleepFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+SleepLAMinsRegression <- lm(TotalMinutesAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 18.1: Relationship between Minutes Asleep & Lightly Active Minutes
+Figure 18.2: Relationship between Minutes Asleep & Lightly Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -587,15 +595,15 @@ ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=TotalMinutesAsleep))
   labs(title="Relationship between Minutes Asleep & Lightly Active Minutes")
 ```
 
-Figure 18.2: Residual Plots of Minutes Asleep & Lightly Active Minutes
+Figure 19.1: Residual Plots of Minutes Asleep & Sedentary Minutes
 ```{r}
 # Residual Plots
-SleepLAMinsRegression <- lm(TotalMinutesAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(SleepLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+SleepSMinsRegression <- lm(TotalMinutesAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
+plot(residuals(SleepSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 19.1: Relationship between Minutes Asleep & Sedentary Minutes
+Figure 19.2: Relationship between Minutes Asleep & Sedentary Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
@@ -608,18 +616,24 @@ ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=TotalMinutesAsleep)) +
   labs(title="Relationship between Minutes Asleep & Sedentary Minutes")
 ```
 
-Figure 19.2: Residual Plots of Minutes Asleep & Sedentary Minutes
+With reference to the residual plots, the analysis of the relationships between minutes asleep and fairly active minutes (Figure 17.1) will be removed due to bias, as the residuals are not normally distributed. Figure 17.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). Although the residual plots between minutes asleep and sedentary minutes (Figure 19.1) shows a non-linear inverted U-shaped pattern, the relationship will still be used for analysis as the straight line will be able to provide a decent approximation with regards to the understanding of the variables' relationship.
+
+With reference to the regression coefficient graphs between minutes asleep, calories burned (Figure 14.2) and lightly active minutes (Figure 18.2), the p-values are higher than 0.05 significance level, which signifies there is insufficient evidence to conclude that there is an effect at the population level (Frost, 2019) for the above-mentioned variables. Thus, the analysis for these variables will be removed.
+
+The regression coefficient graphs between minutes asleep, total steps (Figure 15.2), very active minute (Figure 16.2) and sedentary minutes (Figure 19.2) indicates the p-values are lower than 0.05 significance level, and has a negative correlation of -0.22, -0.23 and -0.57 respectively, with respect to minutes asleep variable, indicating an inverse relationship whereas minutes asleep variable increases, the second variable decreases (Taylor, 1990). The strength of the correlation coefficient between minutes asleep and sedentary minute (Figure 19.2) is moderate (-0.57) while total steps (Figure 15.2) and very active minutes (Figure 16.2) have a weak correlation. The 3 variables also have a weak effect size of coefficient of determination.
+
+
+**Minutes Awake Before Asleep as Fixed Variable**
+
+Figure 20.1: Residual Plots of Minutes Awake Before Asleep & Calories Burned
 ```{r}
 # Residual Plots
-SleepSMinsRegression <- lm(TotalMinutesAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
-plot(residuals(SleepSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
+AwakeCalRegression <- lm(MinutesAwakeBeforeAsleep ~ Calories, data = activitysleep_cleaned)
+plot(residuals(AwakeCalRegression) ~ Calories, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Comment for Minutes Asleep & Calories/Total Steps/Activities
-
-
-Figure 20.1: Relationship between Minutes Awake Before Asleep & Calories Burned
+Figure 20.2: Relationship between Minutes Awake Before Asleep & Calories Burned
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=Calories, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -632,15 +646,15 @@ ggplot(activitysleep_cleaned, aes(x=Calories, y=MinutesAwakeBeforeAsleep)) +
   labs(title="Relationship between Minutes Awake Before Asleep & Calories Burned")
 ```
 
-Figure 20.2: Residual Plots of Minutes Awake Before Asleep & Calories Burned
+Figure 21.1: Residual Plots of Minutes Awake Before Asleep & Total Steps
 ```{r}
 # Residual Plots
-AwakeCalRegression <- lm(MinutesAwakeBeforeAsleep ~ Calories, data = activitysleep_cleaned)
-plot(residuals(AwakeCalRegression) ~ Calories, data = activitysleep_cleaned)
+AwakeStepsRegression <- lm(MinutesAwakeBeforeAsleep ~ TotalSteps, data = activitysleep_cleaned)
+plot(residuals(AwakeStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 21.1: Relationship between Minutes Awake Before Asleep & Total Steps
+Figure 21.2: Relationship between Minutes Awake Before Asleep & Total Steps
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -653,15 +667,15 @@ ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=MinutesAwakeBeforeAsleep)) +
   labs(title="Relationship between Minutes Awake Before Asleep & Total Steps")
 ```
 
-Figure 21.2: Residual Plots of Minutes Awake Before Asleep & Total Steps
+Figure 22.1: Residual Plots of Minutes Awake Before Asleep & Very Active Minutes
 ```{r}
 # Residual Plots
-AwakeStepsRegression <- lm(MinutesAwakeBeforeAsleep ~ TotalSteps, data = activitysleep_cleaned)
-plot(residuals(AwakeStepsRegression) ~ TotalSteps, data = activitysleep_cleaned)
+AwakeVAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 22.1: Relationship between Minutes Awake Before Asleep & Very Active Minutes
+Figure 22.2: Relationship between Minutes Awake Before Asleep & Very Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -674,15 +688,15 @@ ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=MinutesAwakeBeforeAslee
   labs(title="Relationship between Minutes Awake Before Asleep & Very Active Minutes")
 ```
 
-Figure 22.2: Residual Plots of Minutes Awake Before Asleep & Very Active Minutes
+Figure 23.1: Residual Plots of Minutes Awake Before Asleep & Fairly Active Minutes
 ```{r}
 # Residual Plots
-AwakeVAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ VeryActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(AwakeVAMinsRegression) ~ VeryActiveMinutes, data = activitysleep_cleaned)
+AwakeFAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 23.1: Relationship between Minutes Awake Before Asleep & Fairly Active Minutes
+Figure 23.2: Relationship between Minutes Awake Before Asleep & Fairly Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -695,15 +709,15 @@ ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=MinutesAwakeBeforeAsl
   labs(title="Relationship between Minutes Awake Before Asleep & Fairly Active Minutes")
 ```
 
-Figure 23.2: Residual Plots of Minutes Awake Before Asleep & Fairly Active Minutes
+Figure 24.1: Residual Plots of Minutes Awake Before Asleep & Lightly Active Minutes
 ```{r}
 # Residual Plots
-AwakeFAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ FairlyActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(AwakeFAMinsRegression) ~ FairlyActiveMinutes, data = activitysleep_cleaned)
+AwakeLAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 24.1: Relationship between Minutes Awake Before Asleep & Lightly Active Minutes
+Figure 24.2: Relationship between Minutes Awake Before Asleep & Lightly Active Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -716,15 +730,15 @@ ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=MinutesAwakeBeforeAs
   labs(title="Relationship between Minutes Awake Before Asleep & Lightly Active Minutes")
 ```
 
-Figure 24.2: Residual Plots of Minutes Awake Before Asleep & Lightly Active Minutes
+Figure 25.1: Residual Plots of Minutes Awake Before Asleep & Sedentary Minutes
 ```{r}
 # Residual Plots
-AwakeLAMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ LightlyActiveMinutes, data = activitysleep_cleaned)
-plot(residuals(AwakeLAMinsRegression) ~ LightlyActiveMinutes, data = activitysleep_cleaned)
+AwakeSMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
+plot(residuals(AwakeSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
 abline(h=0)
 ```
 
-Figure 25.1: Relationship between Minutes Awake Before Asleep & Sedentary Minutes
+Figure 25.2: Relationship between Minutes Awake Before Asleep & Sedentary Minutes
 ```{r data visualization}
 ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
@@ -737,17 +751,9 @@ ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep
   labs(title="Relationship between Minutes Awake Before Asleep & Sedentary Minutes")
 ```
 
-Figure 25.2: Residual Plots of Minutes Awake Before Asleep & Sedentary Minutes
-```{r}
-# Residual Plots
-AwakeSMinsRegression <- lm(MinutesAwakeBeforeAsleep ~ SedentaryMinutes, data = activitysleep_cleaned)
-plot(residuals(AwakeSMinsRegression) ~ SedentaryMinutes, data = activitysleep_cleaned)
-abline(h=0)
-```
+With reference to the residual plots, the analysis of the relationships between minutes awake before asleep, calories burned (Figure 20.1), lightly active minutes (Figure 24.1), sedentary minutes (Figure 25.1), total steps (Figure 21.1), and fairly active minutes (Figure 23.1) will be removed due to bias, as the residuals are not normally distributed. Figure 21.1 and Figure 23.1 shows a decreasing trend as the total steps and fairly active minutes variable increases. Figure 20.1, Figure 24.1, and Figure 25.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). Although the residual plots between minutes awake before asleep and very active minutes (Figure 22.1) shows a non-linear inverted U-shaped pattern, the relationship will still be used for analysis as the straight line will be able to provide a decent approximation with regards to the understanding of the variables' relationship.
 
-Comment for Minutes Awake Before Asleep & Calories/Total Steps/Activities
-
-
+With reference to the regression coefficient graphs between minutes awake before asleep and very active minutes (Figure 22.2), the p-value is 0.045 which is lower than the significance level of 0.05. This signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019). The variable has a negative correlation of -0.099 indicating an inverse relationship whereas minutes asleep variable increases. However, it has a weak correlation (-0.099) and a weak effect size of coefficient of determination (0.0057).
 
 
 ## Act: Recommendations
@@ -784,6 +790,8 @@ Centers for Disease Control and Prevention. (2020, October 7). How much physical
 
 Corporate Finance Institute. (2021, July 28). Coefficient of Determination. https://corporatefinanceinstitute.com/resources/knowledge/other/coefficient-of-determination/
 
+Corporate Finance Institute. (2022, January 15). Heteroskedasticity. https://corporatefinanceinstitute.com/resources/knowledge/other/heteroskedasticity/
+
 Frost, J. (2019, March 15). Check Your Residual Plots to Ensure Trustworthy Regression Results! Statistics By Jim. https://statisticsbyjim.com/regression/check-residual-plots-regression-analysis/
 
 Laskowski, E. R. (2020, October 2). Heart rate: What’s normal? Mayo Clinic. https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979?reDate=15032022
@@ -793,5 +801,7 @@ Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statist
 Park J. H., Moon J. H., Kim H. J., Kong M. H., Oh Y. H. (2020). Sedentary lifestyle: overview of updated evidence of potential health risks. Korean J. Fam. Med. 41 365–373. 10.4082/KJFM.20.0165
 
 Peters, B. (2020, August 13). Improve Insomnia by Avoiding Time Spent Lying Awake in Bed at Night. Verywell Health. https://www.verywellhealth.com/30-days-to-better-sleep-dont-lie-awake-in-bed-at-night-3969250
+
+Taylor, R. (1990). Interpretation of the Correlation Coefficient: A Basic Review. Journal of Diagnostic Medical Sonography, 6(1), 35–39. https://doi.org/10.1177/875647939000600106
 
 Walsh, G. (2022, January 4). How many calories do I burn a day- and how many calories do I need to lose weight? GoodtoKnow. https://www.goodto.com/wellbeing/diets-exercise/what-is-calorie-how-many-lose-weigt-425557
