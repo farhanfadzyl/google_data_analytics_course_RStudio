@@ -2,7 +2,9 @@
 title: 'Case Study 2: Bellabeat'
 author: "Farhan"
 date: '2022-03-14'
-output: html_document
+output:
+  html_document: default
+  word_document: default
 ---
 
 ## Install and load packages
@@ -43,72 +45,72 @@ activitysleep <- read_csv("activity_sleep.csv")
 ## View data
 
 _daily activity:_
-```{r view data with head()}
+```{r}
 head(dailyactivity)
 ```
-```{r view data with str()}
+```{r}
 str(dailyactivity)
 ```
-```{r view data with glimpse()}
+```{r}
 glimpse(dailyactivity)
 ```
-```{r view column names}
+```{r}
 colnames(dailyactivity)
 ```
 
 _heartrate:_
-```{r view data with head()}
+```{r}
 head(heartrate)
 ```
-```{r view data with str()}
+```{r}
 str(heartrate)
 ```
-```{r view data with glimpse()}
+```{r}
 glimpse(heartrate)
 ```
-```{r view column names}
+```{r}
 colnames(heartrate)
 ```
 
 _sleep:_
-```{r view data with head()}
+```{r}
 head(sleep)
 ```
-```{r view data with str()}
+```{r}
 str(sleep)
 ```
-```{r view data with glimpse()}
+```{r}
 glimpse(sleep)
 ```
-```{r view column names}
+```{r}
 colnames(sleep)
 ```
 
 _weightlog:_
-```{r view data with head()}
+```{r}
 head(weightlog)
 ```
-```{r view data with str()}
+```{r}
 str(weightlog)
 ```
-```{r view data with glimpse()}
+```{r}
 glimpse(weightlog)
 ```
-```{r view column names}
+```{r}
 colnames(weightlog)
 ```
 
 _mergedfile:_
-```{r view data with head()}
+```{r}
 head(mergedfile)
 ```
-```{r view data with str()}
+```{r}
 str(mergedfile)
 ```
-```{r view data with glimpse()}
+```{r}
 glimpse(mergedfile)
 ```
-```{r view column names}
+```{r}
 colnames(mergedfile)
 ```
 
@@ -116,19 +118,19 @@ colnames(mergedfile)
 ## Data cleaning
 
 Identify duplicate data in Sleep file.
-```{r identify duplicates}
+```{r}
 duplicated(sleep)
 sum(duplicated(sleep))
 ```
 
 Remove duplicate data in Sleep file.
-```{r remove duplicates}
+```{r}
 sleep_cleaned <- unique(sleep)
 view(sleep_cleaned)
 ```
 
 Adding Day Of Week Column
-```{r adding Day Of Week column}
+```{r}
 mergedfile2 <- mergedfile
 mergedfile2$DayOfWeek <- weekdays(mergedfile2$ActivityDate, abbreviate = TRUE)
 
@@ -140,7 +142,7 @@ sleep3$DayOfWeek <- weekdays(sleep2$SleepDate_Formatted, abbreviate = TRUE)
 ```
 
 Reorder Day of Week
-```{r Reorder Day of Week}
+```{r}
 mergedfile3 <- mergedfile2 %>%
   select(DayOfWeek, TotalSteps, TotalDistance, VeryActiveDistance, ModeratelyActiveDistance, LightActiveDistance, SedentaryActiveDistance, VeryActiveMinutes,FairlyActiveMinutes,LightlyActiveMinutes,SedentaryMinutes,Calories) %>%
   mutate(DayOfWeek = factor(DayOfWeek, levels= c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")))
@@ -155,7 +157,7 @@ sleep4 <- sleep3 %>%
 ```
 
 Adding "Minutes to Fall Asleep" Column
-```{r Adding "Minutes to Fall Asleep" column}
+```{r}
 sleep4$MinutesToFallAsleep <-with(sleep4,TotalTimeInBed - TotalMinutesAsleep)
 
 mergedfile$MinutesToFallAsleep <-with(mergedfile,TotalTimeInBed - TotalMinutesAsleep)
@@ -166,10 +168,11 @@ Remove rows where "TotalMinutesAsleep" column is Null
 activitysleep_cleaned <- activitysleep[complete.cases(activitysleep[ , c('TotalMinutesAsleep')]), ] 
 ```
 
+
 ## Analyze: Summary statistics
 
 Determine the number of unqiue values and the number of rows in the data frame by using n_distinct() and nrow() functions respectively.
-```{r number of unique value}
+```{r}
 n_distinct(dailyactivity$Id)
 n_distinct(heartrate$Id)
 n_distinct(sleep_cleaned$Id)
@@ -177,7 +180,7 @@ n_distinct(weightlog$Id)
 n_distinct(mergedfile$Id)
 ```
 
-```{r number of rows}
+```{r}
 nrow(dailyactivity)
 nrow(heartrate)
 nrow(sleep_cleaned)
@@ -188,7 +191,7 @@ nrow(mergedfile)
 The heart rate and weight log data frames consist of 14 and 8 unique Ids respectively, which indicates a very low number of participants. Therefore, using the data frames individually will not be able to provide reliable recommendations.
 
 _daily activity:_
-```{r summary of daily activity}
+```{r}
 dailyactivity %>%  
   select(TotalSteps,
          TotalDistance,            
@@ -214,7 +217,7 @@ dailyactivity %>%
 - Average user burned 2,304 calories a day. Studies found that the average person burns around 1,800 calories a day doing absolutely nothing (Walsh, 2022). This suggests average users are burning 504 calories worth of exercise each day.
 
 _heartrate:_
-```{r summary of heart rate}
+```{r}
 heartrate %>%  
   select(Value) %>%
   summary()
@@ -224,7 +227,7 @@ heartrate %>%
 - Despite the low sample size of 14 participants, the average user's heart rate is 77 beats per minute (bpm), which falls between a normal resting heart rate for adults, ranges from 60 to 100 bpm according to the American Heart Association (AHA) (AHA, 2015). Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness (Laskowski, 2020).
 
 _sleep:_
-```{r summary of sleep}
+```{r}
 sleep_cleaned %>%  
   select(TotalSleepRecords,  
          TotalMinutesAsleep,
@@ -238,7 +241,7 @@ sleep_cleaned %>%
 - Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep.
 
 _weightlog:_
-```{r summary of sleep}
+```{r}
 weightlog %>%  
   select(WeightKg,
          Fat,
@@ -249,8 +252,6 @@ weightlog %>%
 **Findings:**
 - Average user's weight is 72kg with a BMI of 25.19, which falls within the overweight range of 25.0 to 29.9. A healthy BMI range falls within 18.5 to 24.9 (CDC, 2020). However, as the sample size for weight log data consists of only 8 participants, the finding is deemed as unreliable due to insufficient sample size to represent the population.
 
-
-## Share: Visualization
 
 Figure 1: Average Total Steps per Day
 ```{r}
@@ -408,7 +409,7 @@ abline(h=0)
 ```
 
 Figure 10.2: Relationship between Calories Burned & Very Active Minutes
-```{r data visualization}
+```{r}
 ggplot(mergedfile, aes(x=VeryActiveMinutes, y=Calories)) +
    geom_point() +
    theme_minimal() +
@@ -429,7 +430,7 @@ abline(h=0)
 ```
  
 Figure 11.2: Relationship between Calories Burned & Fairly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(mergedfile, aes(x=FairlyActiveMinutes, y=Calories)) +
    geom_point() +
    theme_minimal() +
@@ -450,7 +451,7 @@ abline(h=0)
 ```
 
 Figure 12.2: Relationship between Calories Burned & Lightly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(mergedfile, aes(x=LightlyActiveMinutes, y=Calories)) +
    geom_point() +
    theme_minimal() +
@@ -471,7 +472,7 @@ abline(h=0)
 ```
 
 Figure 13.2: Relationship between Calories Burned & Sedentary Minutes
-```{r data visualization}
+```{r}
 ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
    geom_point() +
    theme_minimal() +
@@ -499,7 +500,7 @@ abline(h=0)
 ```
 
 Figure 14.2: Relationship between Minutes Asleep & Calories Burned
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=Calories, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -520,7 +521,7 @@ abline(h=0)
 ```
 
 Figure 15.2: Relationship between Minutes Asleep & Total Steps
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -541,7 +542,7 @@ abline(h=0)
 ```
 
 Figure 16.2: Relationship between Minutes Asleep & Very Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -562,7 +563,7 @@ abline(h=0)
 ```
 
 Figure 17.2: Relationship between Minutes Asleep & Fairly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -583,7 +584,7 @@ abline(h=0)
 ```
 
 Figure 18.2: Relationship between Minutes Asleep & Lightly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -604,7 +605,7 @@ abline(h=0)
 ```
 
 Figure 19.2: Relationship between Minutes Asleep & Sedentary Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=TotalMinutesAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -634,7 +635,7 @@ abline(h=0)
 ```
 
 Figure 20.2: Relationship between Minutes Awake Before Asleep & Calories Burned
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=Calories, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -655,7 +656,7 @@ abline(h=0)
 ```
 
 Figure 21.2: Relationship between Minutes Awake Before Asleep & Total Steps
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=TotalSteps, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -676,7 +677,7 @@ abline(h=0)
 ```
 
 Figure 22.2: Relationship between Minutes Awake Before Asleep & Very Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=VeryActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -697,7 +698,7 @@ abline(h=0)
 ```
 
 Figure 23.2: Relationship between Minutes Awake Before Asleep & Fairly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=FairlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -718,7 +719,7 @@ abline(h=0)
 ```
 
 Figure 24.2: Relationship between Minutes Awake Before Asleep & Lightly Active Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=LightlyActiveMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -739,7 +740,7 @@ abline(h=0)
 ```
 
 Figure 25.2: Relationship between Minutes Awake Before Asleep & Sedentary Minutes
-```{r data visualization}
+```{r}
 ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep)) +
    geom_point() +
    theme_minimal() +
@@ -754,26 +755,6 @@ ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep
 With reference to the residual plots, the analysis of the relationships between minutes awake before asleep, calories burned (Figure 20.1), lightly active minutes (Figure 24.1), sedentary minutes (Figure 25.1), total steps (Figure 21.1), and fairly active minutes (Figure 23.1) will be removed due to bias, as the residuals are not normally distributed. Figure 21.1 and Figure 23.1 shows a decreasing trend as the total steps and fairly active minutes variable increases. Figure 20.1, Figure 24.1, and Figure 25.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). Although the residual plots between minutes awake before asleep and very active minutes (Figure 22.1) shows a non-linear inverted U-shaped pattern, the relationship will still be used for analysis as the straight line will be able to provide a decent approximation with regards to the understanding of the variables' relationship.
 
 With reference to the regression coefficient graphs between minutes awake before asleep and very active minutes (Figure 22.2), the p-value is 0.045 which is lower than the significance level of 0.05. This signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019). The variable has a negative correlation of -0.099 indicating an inverse relationship whereas minutes asleep variable increases. However, it has a weak correlation (-0.099) and a weak effect size of coefficient of determination (0.0057).
-
-
-## Act: Recommendations
-
-**Recommendations**
-1. Bellabeat could explore methods to increase data collection in regards to heart rate, sleep pattern and weight log as there were low number of participants. .....
-
-2. The fact that users spent more time on very active activity than moderately and light activities suggests that the users have strong interest in doing vigorous activities. Company could market product's durability, comfort, functionality and features tailored to the vigorous activities such as running, jogging, swimming continous laps, playing sports or skipping with a rope.
-
-3. Average user spent 991.2 minutes or 16.53 hours of sedentary time a day....
-
-4. This suggests average users are burning 504 calories worth of exercise each day.
-
-5. Average user slept around 419.2 minutes or 7 hours per day,
-
-6. As the average users took around 39.3 minutes to fall asleep, studies suggest if someone cannot fall asleep within 15 to 20 minutes, the person should leave his or her bed. The person should engage in relaxing activities like read a boring book, stretch or breath slowly, allowing tension to dissipate, while waiting for sleepiness to come. The activities should not be stimulating or rewarding, like watching television or computers (Peters, 2020). Bellabeat product.....
-
-7. We can assume users did not move as much on Sundays, and will need extra reminder and motivation. Bellabeat could also set reminders and motivation every 2 to 3 hours if users is not on track to fulfil 10,000 steps per day. Content, info sharing......
-
-8. As users spents more sedentary minutes on weekdays, product could....
 
 
 ## References
