@@ -347,7 +347,7 @@ ggplot(AveHR, aes(x = DayOfWeek, y = Average_Heart_Rate)) +
   geom_text(aes(label = Average_Heart_Rate), vjust = 1.5, colour = "white") +
   labs(title="Average Heart Rate per Day")
 ```
-Figure 6 shows that users maintained a consistent heart rate, ranging from 77 to 81 bpm, throughtout the week. Users tend to have a higher heart rate on Saturdays.
+Figure 6 shows that users maintained a consistent heart rate, ranging from 77 to 81 bpm, throughout the week. Users tend to have a higher heart rate on Saturdays.
 
 Figure 7: Average Minutes Asleep per Day
 ```{r}
