@@ -276,7 +276,7 @@ ggplot(Average_Calories, aes(x = DayOfWeek, y = Calories_Burned)) +
   geom_text(aes(label = Calories_Burned), vjust = 1.5, colour = "white") +
   labs(title="Average Calories Burned per Day")
 ```
-Figure 2 dislplays users are burning their calories at a consistent amount throughout the week, ranging from 2,200 to 2,356 calories.
+Figure 2 displays users are burning their calories at a consistent amount throughout the week, ranging from 2,200 to 2,356 calories.
 
 Figure 3: Average of Activity Minutes per Day
 ```{r}
