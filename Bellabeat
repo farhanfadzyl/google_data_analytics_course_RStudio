@@ -126,7 +126,6 @@ sum(duplicated(sleep))
 Remove duplicate data in Sleep file.
 ```{r}
 sleep_cleaned <- unique(sleep)
-view(sleep_cleaned)
 ```
 
 Adding Day Of Week Column
