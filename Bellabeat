@@ -203,6 +203,7 @@ dailyactivity %>%
 ```
 
 **Findings:**
+
 - Average user took 7,638 steps a day, which is below Centers for Disease Control and Prevention (CDC) recommendation of 10,000 steps a day (CDC, n.d.).
 
 - Average user spent 21.16 minutes a day doing very active activity. This equates to 148.12 minutes of very active activity per week, exceeded CDC's recommendation of 75 minutes per week (CDC, 2020). This suggests participants have a very active lifestyle.
@@ -223,6 +224,7 @@ heartrate %>%
 ```
 
 **Findings:**
+
 - Despite the low sample size of 14 participants, the average user's heart rate is 77 beats per minute (bpm), which falls between a normal resting heart rate for adults, ranges from 60 to 100 bpm according to the American Heart Association (AHA) (AHA, 2015). Generally, a lower heart rate at rest implies more efficient heart function and better cardiovascular fitness (Laskowski, 2020).
 
 _sleep:_
@@ -235,6 +237,7 @@ sleep_cleaned %>%
 ```
 
 **Findings:**
+
 - Average user slept around 419.2 minutes or 7 hours per day, which met CDC's sleep recommendations for adults (CDC, 2017).
 
 - Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep.
@@ -249,6 +252,7 @@ weightlog %>%
 ```
 
 **Findings:**
+
 - Average user's weight is 72kg with a BMI of 25.19, which falls within the overweight range of 25.0 to 29.9. A healthy BMI range falls within 18.5 to 24.9 (CDC, 2020). However, as the sample size for weight log data consists of only 8 participants, the finding is deemed as unreliable due to insufficient sample size to represent the population.
 
 
@@ -263,6 +267,7 @@ ggplot(Average_Total_Steps, aes(x = DayOfWeek, y = Average_Total_Steps)) +
   geom_text(aes(label = Average_Total_Steps), vjust = 1.5, colour = "white") +
   labs(title="Average Total Steps per Day")
 ```
+
 Figure 1 shows that the users did not achieve CDC's recommended 10,000 steps per day. Sunday was observed to have the least number of steps of 6,933 steps, and Saturday was observed to have the highest number of steps of 8,153 steps. Weekdays shows a consistent number of steps ranging from 7,406 steps to 8,125 steps. 
 
 Figure 2: Average Calories Burned per Day
@@ -276,6 +281,7 @@ ggplot(Average_Calories, aes(x = DayOfWeek, y = Calories_Burned)) +
   geom_text(aes(label = Calories_Burned), vjust = 1.5, colour = "white") +
   labs(title="Average Calories Burned per Day")
 ```
+
 Figure 2 displays users are burning their calories at a consistent amount throughout the week, ranging from 2,200 to 2,356 calories.
 
 Figure 3: Average of Activity Minutes per Day
@@ -297,6 +303,7 @@ Long_AveMins %>%
   geom_text(aes(label = Minutes), vjust = 1.5, colour = "white", size=3, position=position_dodge(.9)) +
   labs(title="Average of Activity Minutes per Day")
 ```
+
 Figure 3 shows a comparison of minutes spent on each activity per day throughout the week. Users spent more time doing very active activity compared to fairly active activity, 148 minutes, more than CDC's recommendation of 75 minutes of very active activity per week (CDC, 2020). This suggest users lead a very active lifestyle and have a strong interest in vigorous activities.
 
 Figure 4: Average Sedentary Minutes per Day
@@ -310,6 +317,7 @@ ggplot(AveSMins, aes(x = DayOfWeek, y = Sedentary_Minutes)) +
   geom_text(aes(label = Sedentary_Minutes), vjust = 1.5, colour = "white") +
   labs(title="Average of Sedentary Minutes per Day")
 ```
+
 Figure 4 depicts the sedentary minutes user spent per day throughout the week. The chart shows users spent lesser sedentary minutes on weekends as compared to weekdays. This suggest users were probably at work, and that contributed to the high sedentary minutes on the weekdays.
 
 Figure 5: Percentage of Time Spent in Different Levels of Activity
@@ -334,6 +342,7 @@ pie(Long_AveMinsPie2$Minutes,
     col = rainbow(length(Long_AveMinsPie2$Activity)), 
     main = "Percentage of Time Spent in Different Levels of Activity Daily")
 ```
+
 Figure 5 shows that users spent 81% of their time daily on sedentary activity.
 
 Figure 6: Average Heart Rate per Day
@@ -347,6 +356,7 @@ ggplot(AveHR, aes(x = DayOfWeek, y = Average_Heart_Rate)) +
   geom_text(aes(label = Average_Heart_Rate), vjust = 1.5, colour = "white") +
   labs(title="Average Heart Rate per Day")
 ```
+
 Figure 6 shows that users maintained a consistent heart rate, ranging from 77 to 81 bpm, throughout the week. Users tend to have a higher heart rate on Saturdays.
 
 Figure 7: Average Minutes Asleep per Day
@@ -360,6 +370,7 @@ ggplot(AveSleep, aes(x = DayOfWeek, y = Minutes_Asleep)) +
   geom_text(aes(label = Minutes_Asleep), vjust = 1.5, colour = "white") +
   labs(title="Average Minutes Asleep per Day")
 ```
+
 Figure 7 shows users tend to sleep least on Thursday with 401 minutes (6 hours 41 minutes) of sleep, and sleep most on Sundays with 453 minutes (7 hours 33 minutes) of sleep. This suggests that users tend to sleep earlier on Sundays as the following day could be a working day.
 
 Figure 8: Average Minutes to Fall Asleep per Day
@@ -373,7 +384,9 @@ ggplot(MinsToSleep, aes(x = DayOfWeek, y = Minutes_To_Fall_Asleep)) +
   geom_text(aes(label = Minutes_To_Fall_Asleep), vjust = 1.5, colour = "white") +
   labs(title="Average Minutes to Fall Asleep per Day")
 ```
+
 Figure 8 shows that users spent the longest time, 51 minutes, to fall asleep on Sundays.
+
 
 
 **Calories as Fixed Variable**
@@ -486,6 +499,7 @@ ggplot(mergedfile, aes(x=SedentaryMinutes, y=Calories)) +
 With reference to the residual plots, the analysis of the relationships between calories, fairly active minutes (Figure 11.1) and sedentary minutes (Figure 13.1) will be removed due to bias, as the residuals are not normally distributed. Figure 11.1 shows a decreasing trend as the fairly active minutes variable increases, and Figure 13.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). The other residual plots (Figure 9.1, Figure 10.1 and Figure 12.1) depicts that the residuals are random in regression analysis as the data are randomly scattered around zero for the entire range of fitted values. When the residuals center on zero, they indicate that the model’s predictions are correct on average rather than systematically too high or low (Frost, 2019). This suggets the estimates are unbiased.
 
 With reference to the regression coefficient graphs between calories, total steps (Figure 9.2), very active minutes (Figure 10.2) and lightly active minutes (Figure 12.2), they indicate the graphs have a p-value of lower than 0.05 significance level, which signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019). However, the variables have a coefficient of determination of 0.35, 0.38 and 0.082, respectively,  which is generally considered a weak or low effect size (Moore et al., 2013). The variables have a positive correlation of 0.56, 0.54 and 0.29 respectively, with respect to calories variable, implying a direct relationship between the variables (Taylor, 1990). The strength of the correlation coefficient between calories, total steps (Figure 9.2) and very active minutes (Figure 10.2) are moderate while lightly active minutes (Figure 12.2) has a weak correlation.
+
 
 
 **Minutes Asleep as Fixed Variable**
@@ -623,6 +637,7 @@ With reference to the regression coefficient graphs between minutes asleep, calo
 The regression coefficient graphs between minutes asleep, total steps (Figure 15.2), very active minute (Figure 16.2) and sedentary minutes (Figure 19.2) indicates the p-values are lower than 0.05 significance level, and has a negative correlation of -0.22, -0.23 and -0.57 respectively, with respect to minutes asleep variable, indicating an inverse relationship whereas minutes asleep variable increases, the second variable decreases (Taylor, 1990). The strength of the correlation coefficient between minutes asleep and sedentary minute (Figure 19.2) is moderate (-0.57) while total steps (Figure 15.2) and very active minutes (Figure 16.2) have a weak correlation. The 3 variables also have a weak effect size of coefficient of determination.
 
 
+
 **Minutes Awake Before Asleep as Fixed Variable**
 
 Figure 20.1: Residual Plots of Minutes Awake Before Asleep & Calories Burned
@@ -754,6 +769,7 @@ ggplot(activitysleep_cleaned, aes(x=SedentaryMinutes, y=MinutesAwakeBeforeAsleep
 With reference to the residual plots, the analysis of the relationships between minutes awake before asleep, calories burned (Figure 20.1), lightly active minutes (Figure 24.1), sedentary minutes (Figure 25.1), total steps (Figure 21.1), and fairly active minutes (Figure 23.1) will be removed due to bias, as the residuals are not normally distributed. Figure 21.1 and Figure 23.1 shows a decreasing trend as the total steps and fairly active minutes variable increases. Figure 20.1, Figure 24.1, and Figure 25.1 shows a cone shape in the residual plot, which indicates the presence of heteroskedasticity (Corporate Finance Institute, 2022). Although the residual plots between minutes awake before asleep and very active minutes (Figure 22.1) shows a non-linear inverted U-shaped pattern, the relationship will still be used for analysis as the straight line will be able to provide a decent approximation with regards to the understanding of the variables' relationship.
 
 With reference to the regression coefficient graphs between minutes awake before asleep and very active minutes (Figure 22.2), the p-value is 0.045 which is lower than the significance level of 0.05. This signifies there is sufficient evidence to conclude that there is an effect at the population level (Frost, 2019). The variable has a negative correlation of -0.099 indicating an inverse relationship whereas minutes asleep variable increases. However, it has a weak correlation (-0.099) and a weak effect size of coefficient of determination (0.0057).
+
 
 
 ## References
