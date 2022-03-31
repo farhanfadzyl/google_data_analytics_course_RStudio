@@ -3,8 +3,8 @@ title: 'Case Study 2: Bellabeat'
 author: "Farhan"
 date: '2022-03-14'
 output:
-  html_document: default
   word_document: default
+  html_document: default
 ---
 
 ## Install and load packages
@@ -266,7 +266,7 @@ sleep_cleaned %>%
 
 -   Average user slept around 419.2 minutes or 7 hours per day, which met CDC's sleep recommendations for adults (CDC, 2017).
 
--   Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 39.3 minutes awake in bed, before falling asleep.
+-   Average user spent 458.5 minutes or 7.64 hours in bed. This suggests average users spent 38 minutes awake in bed, before falling asleep.
 
 *weightlog:*
 
