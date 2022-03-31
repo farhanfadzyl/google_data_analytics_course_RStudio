@@ -374,7 +374,7 @@ pie(Long_AveMinsPie2$Minutes,
     main = "Percentage of Time Spent in Different Levels of Activity Daily")
 ```
 
-Figure 5 shows that users spent 69% of their time daily on sedentary activity, and 15% of the day was unaccounted for. This could suggests users did not put on any smart devices, thus it was unable to capture any activities.
+Figure 5 shows that users spent 81% of their daily activity time on sedentary activity.
 
 Figure 6: Average Heart Rate per Day
 
